@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useBusinessListStore } from "../stores/BusinessListStores";
 import { Business } from "@/types/Business";
+import { deleteBusiness } from "@/actions";
 
 export const useBusinessList = (initialBusinesses: any[]) => {
   console.log(initialBusinesses);
@@ -21,6 +22,7 @@ export const useBusinessList = (initialBusinesses: any[]) => {
 
   const handleDelete = async () => {
     // TODO: Implement delete business
+    await deleteBusiness(businessToDelete?.id as string);
   };
 
   const handleCloseDialog = () => {

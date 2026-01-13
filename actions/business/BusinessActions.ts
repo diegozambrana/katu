@@ -50,3 +50,15 @@ export async function createBusiness(formData: FormData) {
   revalidatePath("/business");
   return data;
 }
+
+export async function deleteBusiness(businessId: string) {
+  await cookies();
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("businesses")
+    .delete()
+    .eq("id", businessId);
+  if (error) throw error;
+  revalidatePath("/business");
+  return data;
+}
