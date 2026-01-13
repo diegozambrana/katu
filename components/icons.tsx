@@ -1,6 +1,7 @@
 import {
   AlertTriangle,
   ArrowRight,
+  Building2Icon,
   Check,
   ChevronLeft,
   ChevronRight,
@@ -35,6 +36,7 @@ export type Icon = LucideIcon;
 
 export const Icons = {
   dashboard: LayoutDashboardIcon,
+  business: Building2Icon,
   logo: Command,
   login: LogIn,
   close: X,
