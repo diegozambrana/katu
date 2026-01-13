@@ -6,6 +6,7 @@ interface MainContainerProps {
   children: React.ReactNode;
   isEmpty?: boolean;
   error?: string;
+  loading?: boolean;
 }
 
 export const TabLayoutContent = ({
@@ -14,7 +15,17 @@ export const TabLayoutContent = ({
   children,
   isEmpty,
   error,
+  loading = false,
 }: MainContainerProps) => {
+  if (loading) {
+    return (
+      <div className="p-4 md:px-8">
+        <div className="flex items-center justify-center h-64">
+          <div className="text-muted-foreground">Cargando...</div>
+        </div>
+      </div>
+    );
+  }
   return (
     <div className="p-4 md:px-8">
       <div className="flex flex-row justify-between items-center mb-6">
