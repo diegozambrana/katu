@@ -1,7 +1,7 @@
 import { Hero } from "@/components/hero";
 import { Suspense } from "react";
 import { FooterPublic } from "@/components/layout/Footer";
-import { Header } from "@/components/layout/Header";
+import { Header } from "@/components/layout/Header/Header";
 
 export default function Home() {
   return (
