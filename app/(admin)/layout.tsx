@@ -18,10 +18,29 @@ async function AuthCheck({ children }: { children: React.ReactNode }) {
   return <>{children}</>;
 }
 
+function LoadingSidebar() {
+  return (
+    <aside className="relative hidden h-screen flex-none border-r bg-card transition-[width] duration-500 md:block z-50 w-72">
+      <div className="hidden p-5 pt-10 lg:block">
+        <h1>Katu</h1>
+      </div>
+      <div className="space-y-4 py-4">
+        <div className="px-3 py-2">
+          <div className="mt-3 space-y-1">
+            <div className="flex items-center justify-center h-64">
+              <div className="text-muted-foreground text-sm">Cargando...</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </aside>
+  );
+}
+
 function LoadingFallback() {
   return (
     <div className="flex">
-      <Sidebar />
+      <LoadingSidebar />
       <main className="w-full flex-1 overflow-hidden h-screen overflow-scroll">
         <Header />
         <div className="p-4">

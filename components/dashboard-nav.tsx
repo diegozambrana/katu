@@ -31,7 +31,7 @@ export function DashboardNav({
 }: DashboardNavProps) {
   const path = usePathname();
   const { isMinimized } = useSidebar();
-  const { signOut, session } = useSession();
+  const { signOut, session, loading } = useSession();
   const router = useRouter();
 
   if (!items?.length) {
@@ -89,7 +89,9 @@ export function DashboardNav({
             <User className={`ml-3 size-5 flex-none`} />
 
             {isMobileNav || (!isMinimized && !isMobileNav) ? (
-              <span className="mr-2 truncate">{session?.user.email}</span>
+              <span className="mr-2 truncate">
+                {loading ? "Cargando..." : session?.user?.email || "Usuario"}
+              </span>
             ) : (
               ""
             )}
