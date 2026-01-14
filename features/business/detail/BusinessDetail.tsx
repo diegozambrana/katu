@@ -15,9 +15,8 @@ import {
   Copy,
   ExternalLink,
   Coffee,
-  MessageCircle,
-  Video,
 } from "lucide-react";
+import { getSocialMediaByValue } from "@/constants/socialMedia";
 import { useRouter } from "next/navigation";
 
 interface BusinessDetailProps {
@@ -44,29 +43,6 @@ export const BusinessDetail = ({ businessId }: BusinessDetailProps) => {
   const mockData = {
     profileViews: 1234,
     productsListed: 45,
-    socialMedia: [
-      {
-        platform: "Facebook",
-        url: "facebook.com/artisancoffee",
-        active: true,
-        icon: MessageCircle,
-        color: "text-blue-600",
-      },
-      {
-        platform: "Instagram",
-        url: "instagram.com/artisancoffee",
-        active: true,
-        icon: MessageCircle,
-        color: "text-pink-600",
-      },
-      {
-        platform: "YouTube",
-        url: "youtube.com/artisancoffee",
-        active: false,
-        icon: Video,
-        color: "text-red-600",
-      },
-    ],
     recentActivity: [
       { action: "Profile updated", time: "2 hours ago", color: "bg-green-500" },
       { action: "New product added", time: "1 day ago", color: "bg-blue-500" },
@@ -77,6 +53,13 @@ export const BusinessDetail = ({ businessId }: BusinessDetailProps) => {
       },
     ],
   };
+
+  // Obtener social links del business, ordenados por sort_order
+  const socialLinks = business.business_social_links
+    ? [...business.business_social_links]
+        .filter((link) => link.active) // Solo mostrar links activos
+        .sort((a, b) => a.sort_order - b.sort_order)
+    : [];
 
   const publicUrl = `catalogo.app/b/${business.slug}`;
 
@@ -247,35 +230,45 @@ export const BusinessDetail = ({ businessId }: BusinessDetailProps) => {
                 <CardTitle>Social Media</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                {mockData.socialMedia.map((social) => {
-                  const Icon = social.icon;
-                  return (
-                    <div
-                      key={social.platform}
-                      className="flex items-center justify-between"
-                    >
-                      <div className="flex items-center gap-3">
-                        <Icon className={`h-5 w-5 ${social.color}`} />
-                        <div>
-                          <p className="font-medium">{social.platform}</p>
-                          <p className="text-sm text-muted-foreground">
-                            {social.url}
-                          </p>
+                {socialLinks.length > 0 ? (
+                  socialLinks.map((link) => {
+                    const platform = getSocialMediaByValue(link.platform);
+                    if (!platform) return null;
+
+                    const Icon = platform.icon;
+                    return (
+                      <div
+                        key={link.id}
+                        className="flex items-center justify-between"
+                      >
+                        <div className="flex items-center gap-3">
+                          <Icon className={`h-5 w-5 ${platform.color}`} />
+                          <div>
+                            <p className="font-medium">{platform.name}</p>
+                            <a
+                              href={link.url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-sm text-muted-foreground hover:text-primary hover:underline"
+                            >
+                              {link.url}
+                            </a>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <div className="h-2 w-2 rounded-full bg-green-500" />
+                          <span className="text-sm text-muted-foreground">
+                            Active
+                          </span>
                         </div>
                       </div>
-                      <div className="flex items-center gap-2">
-                        <div
-                          className={`h-2 w-2 rounded-full ${
-                            social.active ? "bg-green-500" : "bg-gray-400"
-                          }`}
-                        />
-                        <span className="text-sm text-muted-foreground">
-                          {social.active ? "Active" : "Inactive"}
-                        </span>
-                      </div>
-                    </div>
-                  );
-                })}
+                    );
+                  })
+                ) : (
+                  <p className="text-sm text-muted-foreground">
+                    No hay redes sociales configuradas
+                  </p>
+                )}
               </CardContent>
             </Card>
           </div>

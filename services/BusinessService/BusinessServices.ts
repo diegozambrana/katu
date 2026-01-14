@@ -17,7 +17,20 @@ export class BusinessServices {
   async getBusinessById(id: string, userId: string) {
     const { data, error } = await this.supabase
       .from("businesses")
-      .select("*")
+      .select(
+        `
+        *,
+        business_social_links (
+          id,
+          created_at,
+          updated_at,
+          active,
+          platform,
+          url,
+          sort_order
+        )
+      `
+      )
       .eq("id", id)
       .eq("user_id", userId)
       .single();
