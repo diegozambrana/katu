@@ -94,3 +94,9 @@ export type matcherType = {
   linkedin?: string;
   phone?: string;
 };
+
+// Business types
+export * from "./Business";
+
+// Product types
+export * from "./Products";

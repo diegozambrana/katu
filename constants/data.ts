@@ -7,4 +7,16 @@ export const navItems: NavItem[] = [
     icon: "business",
     label: "business",
   },
+  {
+    title: "Productos",
+    href: "/product",
+    icon: "business",
+    label: "products",
+  },
+  {
+    title: "Catálogos",
+    href: "/catalog",
+    icon: "media",
+    label: "catalogs",
+  },
 ];
