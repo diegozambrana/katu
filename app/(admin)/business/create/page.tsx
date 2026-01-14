@@ -1,3 +1,5 @@
+import { BusinessCreate } from "@/features/business/create";
+
 export default function BusinessCreatePage() {
-  return <div>BusinessCreatePage</div>;
+  return <BusinessCreate />;
 }
