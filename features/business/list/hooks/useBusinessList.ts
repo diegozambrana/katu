@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useBusinessListStore } from "../stores/BusinessListStores";
 import { Business } from "@/types/Business";
 import { deleteBusiness } from "@/actions";
+import { toast } from "sonner";
 
 export const useBusinessList = (initialBusinesses: any[]) => {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
@@ -21,6 +22,7 @@ export const useBusinessList = (initialBusinesses: any[]) => {
 
   const handleDelete = async () => {
     await deleteBusiness(businessToDelete?.id as string);
+    toast.success("Business deleted successfully");
   };
 
   const handleCloseDialog = () => {

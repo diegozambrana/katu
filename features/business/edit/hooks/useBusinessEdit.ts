@@ -11,6 +11,7 @@ import { updateBusiness } from "@/actions/business/BusinessActions";
 import { getBusinessById } from "@/actions/business/BusinessActions";
 import { SocialLink } from "../../create/components/BusinessSocialLinksManager";
 import type { BusinessSocialLink } from "@/types/Business";
+import { toast } from "sonner";
 
 const businessSchema = z.object({
   name: z.string().min(1, "El nombre es requerido"),
@@ -124,16 +125,18 @@ export const useBusinessEdit = (businessId: string) => {
         });
 
         // Convertir business_social_links a SocialLink[]
-        if (business.business_social_links && Array.isArray(business.business_social_links)) {
-          const convertedLinks: SocialLink[] = business.business_social_links.map(
-            (link: BusinessSocialLink) => ({
+        if (
+          business.business_social_links &&
+          Array.isArray(business.business_social_links)
+        ) {
+          const convertedLinks: SocialLink[] =
+            business.business_social_links.map((link: BusinessSocialLink) => ({
               id: link.id, // Mantener el ID de la BD para identificar updates/deletes
               platform: link.platform,
               url: link.url,
               sort_order: link.sort_order,
               active: link.active,
-            })
-          );
+            }));
           setSocialLinks(convertedLinks);
         } else {
           setSocialLinks([]);
@@ -197,11 +200,13 @@ export const useBusinessEdit = (businessId: string) => {
         formDataToSend.append("social_links", JSON.stringify(socialLinks));
 
         await updateBusiness(formDataToSend);
+        toast.success("Business updated successfully");
         router.push(`/business/${businessId}`);
       } catch (err) {
         setError(
           err instanceof Error ? err.message : "Error al actualizar el negocio"
         );
+        toast.error("Error updating business");
       }
     });
   };

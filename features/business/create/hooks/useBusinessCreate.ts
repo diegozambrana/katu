@@ -8,6 +8,7 @@ import { useEffect } from "react";
 import { useTransition } from "react";
 import { useBusinessCreateStore } from "../stores/BusinessCreateStore";
 import { createBusiness } from "@/actions/business/BusinessActions";
+import { toast } from "sonner";
 
 const businessSchema = z.object({
   name: z.string().min(1, "El nombre es requerido"),
@@ -133,12 +134,14 @@ export const useBusinessCreate = () => {
         }
 
         const result = await createBusiness(formDataToSend);
+        toast.success("Business created successfully");
         reset();
         router.push(`/business/${result.id}`);
       } catch (err) {
         setError(
           err instanceof Error ? err.message : "Error al crear el negocio"
         );
+        toast.error("Error creating business");
       }
     });
   };
