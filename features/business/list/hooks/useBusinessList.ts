@@ -4,7 +4,6 @@ import { Business } from "@/types/Business";
 import { deleteBusiness } from "@/actions";
 
 export const useBusinessList = (initialBusinesses: any[]) => {
-  console.log(initialBusinesses);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [businessToDelete, setBusinessToDelete] = useState<Business | null>(
     null
@@ -21,7 +20,6 @@ export const useBusinessList = (initialBusinesses: any[]) => {
   }, [initialBusinesses]);
 
   const handleDelete = async () => {
-    // TODO: Implement delete business
     await deleteBusiness(businessToDelete?.id as string);
   };
 

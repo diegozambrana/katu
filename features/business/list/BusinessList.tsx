@@ -1,6 +1,6 @@
 "use client";
 
-import { TabLayoutContent } from "@/components/layout/container";
+import { MainContainer } from "@/components/layout/container";
 import {
   CustomTable,
   type CustomTableColumn,
@@ -63,7 +63,7 @@ export const BusinessList = ({ initialBusinesses }: Props) => {
   };
 
   return (
-    <TabLayoutContent
+    <MainContainer
       title="Business List"
       action={
         <Button onClick={() => router.push("/business/create")}>
@@ -95,6 +95,6 @@ export const BusinessList = ({ initialBusinesses }: Props) => {
         onConfirm={handleDelete}
         variant="destructive"
       />
-    </TabLayoutContent>
+    </MainContainer>
   );
 };

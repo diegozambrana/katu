@@ -6,16 +6,13 @@ import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 
 export async function getBusinesses() {
-  // Acceder primero a datos dinámicos para evitar el error de Date.now() de Console Ninja
   await cookies();
   const supabase = await createClient();
 
-  // Obtener usuario autenticado
   const {
     data: { user },
     error: authError,
   } = await supabase.auth.getUser();
-  console.log("user:", user?.id || "No user");
 
   if (authError || !user) {
     throw new Error("No autenticado");
@@ -23,12 +20,10 @@ export async function getBusinesses() {
 
   const businessService = new BusinessServices(supabase);
   const businesses = await businessService.getBusinessesByUserId(user.id);
-  console.log("businesses", businesses);
   return businesses;
 }
 
 export async function createBusiness(formData: FormData) {
-  // Acceder primero a datos dinámicos para evitar el error de Date.now() de Console Ninja
   await cookies();
   const supabase = await createClient();
   const {
@@ -49,6 +44,24 @@ export async function createBusiness(formData: FormData) {
 
   revalidatePath("/business");
   return data;
+}
+
+export async function getBusinessById(businessId: string) {
+  await cookies();
+  const supabase = await createClient();
+
+  const {
+    data: { user },
+    error: authError,
+  } = await supabase.auth.getUser();
+
+  if (authError || !user) {
+    throw new Error("No autenticado");
+  }
+
+  const businessService = new BusinessServices(supabase);
+  const business = await businessService.getBusinessById(businessId, user.id);
+  return business;
 }
 
 export async function deleteBusiness(businessId: string) {

@@ -9,7 +9,7 @@ interface MainContainerProps {
   loading?: boolean;
 }
 
-export const TabLayoutContent = ({
+export const MainContainer = ({
   title,
   action,
   children,
