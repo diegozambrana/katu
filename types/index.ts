@@ -100,3 +100,6 @@ export * from "./Business";
 
 // Product types
 export * from "./Products";
+
+// Catalog types
+export * from "./Catalog";
