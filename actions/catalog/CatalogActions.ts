@@ -148,7 +148,9 @@ export async function createCatalog(formData: FormData) {
 
       if (Array.isArray(contacts) && contacts.length > 0) {
         const contactsData = contacts
-          .filter((contact: any) => contact.value && contact.value.trim() !== "")
+          .filter(
+            (contact: any) => contact.value && contact.value.trim() !== ""
+          )
           .map((contact: any) => ({
             catalog_id: catalog.id,
             label: contact.label,
@@ -430,7 +432,8 @@ export async function updateCatalog(formData: FormData) {
 
           // Manejar productos de la sección
           const existingSection = existingSectionsMap.get(section.id);
-          const existingProducts = existingSection?.catalog_section_products || [];
+          const existingProducts =
+            existingSection?.catalog_section_products || [];
 
           const existingProductsMap = new Map(
             existingProducts.map((p: any) => [p.id, p])
@@ -591,4 +594,93 @@ export async function deleteCatalog(catalogId: string) {
   if (error) throw error;
   revalidatePath("/catalog");
   return data;
+}
+
+export async function getCatalogBySlugPublic(catalogSlug: string) {
+  await cookies();
+  const supabase = await createClient();
+
+  const { data: catalog, error } = await supabase
+    .from("catalogs")
+    .select(
+      `
+      *,
+      catalog_slides (
+        id,
+        image,
+        image_caption,
+        title,
+        description,
+        link_url,
+        sort_order,
+        active
+      ),
+      catalog_sections (
+        id,
+        title,
+        description,
+        sort_order,
+        active,
+        catalog_section_products (
+          id,
+          product_id,
+          sort_order,
+          active,
+          product:products (
+            id,
+            name,
+            slug,
+            description,
+            base_price,
+            currency,
+            is_on_sale,
+            sale_label,
+            product_images (
+              id,
+              image,
+              image_caption,
+              is_primary
+            ),
+            product_prices (
+              id,
+              label,
+              price,
+              active,
+              sort_order
+            )
+          )
+        )
+      ),
+      catalog_contacts (
+        id,
+        label,
+        type,
+        value,
+        sort_order,
+        active
+      ),
+      business:businesses (
+        id,
+        name,
+        description,
+        avatar,
+        phone,
+        whatsapp_phone,
+        email,
+        address,
+        city,
+        country,
+        website_url
+      )
+    `
+    )
+    .eq("slug", catalogSlug)
+    .eq("active", true)
+    .single();
+  console.log("catalogSlug", catalogSlug);
+  console.log("error", error);
+  console.log("catalog", catalog);
+
+  if (error) throw error;
+  return catalog;
 }
