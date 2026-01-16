@@ -4,11 +4,12 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useRouter } from "next/navigation";
-import { useEffect, useRef } from "react";
-import { useTransition } from "react";
+import { useEffect, useRef, useTransition } from "react";
 import { useBusinessCreateStore } from "../../create/stores/BusinessCreateStore";
-import { updateBusiness } from "@/actions/business/BusinessActions";
-import { getBusinessById } from "@/actions/business/BusinessActions";
+import {
+  updateBusiness,
+  getBusinessById,
+} from "@/actions/business/BusinessActions";
 import { SocialLink } from "../../create/components/BusinessSocialLinksManager";
 import type { BusinessSocialLink } from "@/types/Business";
 import { toast } from "sonner";
@@ -19,19 +20,11 @@ const businessSchema = z.object({
   description: z.string().optional(),
   phone: z.string().optional(),
   whatsapp_phone: z.string().optional(),
-  email: z
-    .string()
-    .email({ message: "Email inválido" })
-    .optional()
-    .or(z.literal("")),
+  email: z.string().email("Email inválido").optional().or(z.literal("")),
   address: z.string().optional(),
   city: z.string().optional(),
   country: z.string().optional(),
-  website_url: z
-    .string()
-    .url({ message: "URL inválida" })
-    .optional()
-    .or(z.literal("")),
+  website_url: z.string().url("URL inválida").optional().or(z.literal("")),
   active: z.boolean(),
   avatar: z.string().nullable().optional(),
   avatar_caption: z.string().optional(),
@@ -48,7 +41,6 @@ export const useBusinessEdit = (businessId: string) => {
   const {
     formData,
     socialLinks,
-    slugManuallyEdited,
     error,
     setFormData,
     setSocialLinks,
@@ -151,7 +143,6 @@ export const useBusinessEdit = (businessId: string) => {
     loadBusiness();
   }, [businessId, form, setFormData, setSocialLinks, setError]);
 
-  const nameValue = form.watch("name");
   const slugValue = form.watch("slug");
 
   // No generar slug automáticamente en modo edición - el slug ya existe

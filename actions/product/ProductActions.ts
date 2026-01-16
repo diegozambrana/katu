@@ -4,6 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { ProductServices } from "@/services";
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
+import type { Product, ProductPrice, ProductImage } from "@/types";
 
 export async function getProducts() {
   await cookies();
@@ -42,7 +43,7 @@ export async function createProduct(formData: FormData) {
   const active = formData.get("active") === "true";
   const business_id = formData.get("business_id") as string;
 
-  const productData: any = {
+  const productData: Partial<Omit<Product, 'id' | 'created_at' | 'updated_at' | 'product_prices' | 'product_images'>> = {
     name,
     slug,
     user_id: user.id,
@@ -72,8 +73,8 @@ export async function createProduct(formData: FormData) {
 
       if (Array.isArray(images) && images.length > 0) {
         const imagesData = images
-          .filter((img: any) => img.image && img.image.trim() !== "")
-          .map((img: any) => ({
+          .filter((img: Partial<ProductImage>) => img.image && img.image.trim() !== "")
+          .map((img: Partial<ProductImage>) => ({
             product_id: product.id,
             image: img.image,
             image_caption: img.image_caption || null,
@@ -102,11 +103,11 @@ export async function createProduct(formData: FormData) {
 
       if (Array.isArray(prices) && prices.length > 0) {
         const pricesData = prices
-          .filter((price: any) => price.label && price.price)
-          .map((price: any) => ({
+          .filter((price: Partial<ProductPrice>) => price.label && price.price)
+          .map((price: Partial<ProductPrice>) => ({
             product_id: product.id,
             label: price.label,
-            price: parseFloat(price.price),
+            price: parseFloat(price.price.toString()),
             sort_order: price.sort_order || 0,
             active: price.active !== false,
           }));
@@ -177,7 +178,7 @@ export async function updateProduct(formData: FormData) {
   }
 
   // Actualizar el producto
-  const productData: any = {
+  const productData: Partial<Omit<Product, 'id' | 'created_at' | 'product_prices' | 'product_images'>> = {
     name,
     slug,
     active,

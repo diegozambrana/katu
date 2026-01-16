@@ -5,15 +5,15 @@ import { Product } from "@/types/Products";
 import { deleteProduct } from "@/actions/product/ProductActions";
 import { toast } from "sonner";
 
-export const useProductList = (initialProducts: any[]) => {
+export const useProductList = (initialProducts: Product[]) => {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [productToDelete, setProductToDelete] = useState<Product | null>(null);
   const { productList, loading, error, setProductList } = useProductListStore();
 
   useEffect(() => {
     // Cargar los datos al montar el componente solo una vez
-    if (initialProducts) {
-      setProductList((initialProducts as Product[]) || []);
+    if (initialProducts?.length > 0) {
+      setProductList(initialProducts);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initialProducts]);

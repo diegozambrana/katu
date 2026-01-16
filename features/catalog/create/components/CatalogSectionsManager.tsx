@@ -160,7 +160,8 @@ export const CatalogSectionsManager = ({
       return;
     }
 
-    const targetIndex = direction === "up" ? productIndex - 1 : productIndex + 1;
+    const targetIndex =
+      direction === "up" ? productIndex - 1 : productIndex + 1;
     [section.products[productIndex], section.products[targetIndex]] = [
       section.products[targetIndex],
       section.products[productIndex],
@@ -182,7 +183,7 @@ export const CatalogSectionsManager = ({
 
   const getProductPrice = (productId: string) => {
     const product = availableProducts.find((p) => p.id === productId);
-    if (product && product.base_price) {
+    if (product?.base_price) {
       return `${product.base_price} ${product.currency || "BOB"}`;
     }
     return "N/A";
@@ -274,7 +275,9 @@ export const CatalogSectionsManager = ({
 
                   {/* Products in Section */}
                   <div className="space-y-2">
-                    <p className="text-sm font-medium">Productos en esta sección:</p>
+                    <p className="text-sm font-medium">
+                      Productos en esta sección:
+                    </p>
 
                     {section.products.length > 0 ? (
                       <div className="space-y-2">
@@ -389,7 +392,7 @@ export const CatalogSectionsManager = ({
       {sections.length === 0 && (
         <p className="text-sm text-muted-foreground text-center">
           No hay secciones. Crea secciones para organizar tus productos (ej:
-          "Ropa de Mujer", "Accesorios").
+          &quot;Ropa de Mujer&quot;, &quot;Accesorios&quot;).
         </p>
       )}
     </div>

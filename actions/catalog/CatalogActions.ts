@@ -4,6 +4,12 @@ import { createClient } from "@/lib/supabase/server";
 import { CatalogServices } from "@/services";
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
+import type {
+  Catalog,
+  CatalogSlide,
+  CatalogSectionProduct,
+  CatalogContact,
+} from "@/types";
 
 export async function getCatalogs() {
   await cookies();
@@ -38,7 +44,17 @@ export async function createCatalog(formData: FormData) {
   const active = formData.get("active") === "true";
   const business_id = formData.get("business_id") as string;
 
-  const catalogData: any = {
+  const catalogData: Partial<
+    Omit<
+      Catalog,
+      | "id"
+      | "created_at"
+      | "updated_at"
+      | "catalog_slides"
+      | "catalog_sections"
+      | "catalog_contacts"
+    >
+  > = {
     name,
     slug,
     user_id: user.id,
@@ -64,8 +80,11 @@ export async function createCatalog(formData: FormData) {
 
       if (Array.isArray(slides) && slides.length > 0) {
         const slidesData = slides
-          .filter((slide: any) => slide.image && slide.image.trim() !== "")
-          .map((slide: any) => ({
+          .filter(
+            (slide: Partial<CatalogSlide>) =>
+              slide.image && slide.image.trim() !== ""
+          )
+          .map((slide: Partial<CatalogSlide>) => ({
             catalog_id: catalog.id,
             image: slide.image,
             image_caption: slide.image_caption || null,
@@ -119,7 +138,14 @@ export async function createCatalog(formData: FormData) {
             section.products.length > 0
           ) {
             const sectionProductsData = section.products.map(
-              (product: any, index: number) => ({
+              (
+                product: {
+                  product_id: string;
+                  sort_order?: number;
+                  active?: boolean;
+                },
+                index: number
+              ) => ({
                 catalog_section_id: createdSection.id,
                 product_id: product.product_id,
                 sort_order: product.sort_order || index,
@@ -149,9 +175,10 @@ export async function createCatalog(formData: FormData) {
       if (Array.isArray(contacts) && contacts.length > 0) {
         const contactsData = contacts
           .filter(
-            (contact: any) => contact.value && contact.value.trim() !== ""
+            (contact: Partial<CatalogContact>) =>
+              contact.value && contact.value.trim() !== ""
           )
-          .map((contact: any) => ({
+          .map((contact: Partial<CatalogContact>) => ({
             catalog_id: catalog.id,
             label: contact.label,
             type: contact.type,
@@ -222,7 +249,16 @@ export async function updateCatalog(formData: FormData) {
   }
 
   // Actualizar el catálogo
-  const catalogData: any = {
+  const catalogData: Partial<
+    Omit<
+      Catalog,
+      | "id"
+      | "created_at"
+      | "catalog_slides"
+      | "catalog_sections"
+      | "catalog_contacts"
+    >
+  > = {
     name,
     slug,
     active,
@@ -436,19 +472,21 @@ export async function updateCatalog(formData: FormData) {
             existingSection?.catalog_section_products || [];
 
           const existingProductsMap = new Map(
-            existingProducts.map((p: any) => [p.id, p])
+            existingProducts.map((p: CatalogSectionProduct) => [p.id, p])
           );
           const newProductsMap = new Map(
-            (section.products || []).map((p) => [p.id, p])
+            (section.products || []).map((p: { id: string }) => [p.id, p])
           );
 
           // Eliminar productos
           const productsToDelete = existingProducts.filter(
-            (p: any) => !newProductsMap.has(p.id)
+            (p: CatalogSectionProduct) => !newProductsMap.has(p.id)
           );
 
           if (productsToDelete.length > 0) {
-            const idsToDelete = productsToDelete.map((p: any) => p.id);
+            const idsToDelete = productsToDelete.map(
+              (p: CatalogSectionProduct) => p.id
+            );
             const { error: deleteError } = await supabase
               .from("catalog_section_products")
               .delete()
@@ -677,9 +715,6 @@ export async function getCatalogBySlugPublic(catalogSlug: string) {
     .eq("slug", catalogSlug)
     .eq("active", true)
     .single();
-  console.log("catalogSlug", catalogSlug);
-  console.log("error", error);
-  console.log("catalog", catalog);
 
   if (error) throw error;
   return catalog;

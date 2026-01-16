@@ -34,9 +34,6 @@ export const CatalogDetail = ({ catalogId }: CatalogDetailProps) => {
   const sections = catalog.catalog_sections?.sort(
     (a, b) => a.sort_order - b.sort_order
   ) || [];
-  const contacts = catalog.catalog_contacts?.sort(
-    (a, b) => a.sort_order - b.sort_order
-  ) || [];
 
   const totalProducts = sections.reduce(
     (acc, section) => acc + (section.catalog_section_products?.length || 0),

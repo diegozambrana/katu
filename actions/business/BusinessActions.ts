@@ -2,6 +2,7 @@
 
 import { createClient } from "@/lib/supabase/server";
 import { BusinessServices } from "@/services";
+import { Business, BusinessSocialLink } from "@/types";
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 
@@ -48,7 +49,9 @@ export async function createBusiness(formData: FormData) {
   const cover = formData.get("cover") as string | null;
   const cover_caption = formData.get("cover_caption") as string | null;
 
-  const businessData: any = {
+  const businessData: Partial<
+    Omit<Business, "id" | "created_at" | "udpated_at" | "business_social_links">
+  > = {
     name,
     slug,
     user_id: user.id,
@@ -84,8 +87,10 @@ export async function createBusiness(formData: FormData) {
 
       if (Array.isArray(socialLinks) && socialLinks.length > 0) {
         const socialLinksData = socialLinks
-          .filter((link: any) => link.url && link.url.trim() !== "") // Solo links con URL válida
-          .map((link: any) => ({
+          .filter(
+            (link: BusinessSocialLink) => link.url && link.url.trim() !== ""
+          ) // Solo links con URL válida
+          .map((link: BusinessSocialLink) => ({
             business_id: business.id,
             platform: link.platform,
             url: link.url,
@@ -167,7 +172,9 @@ export async function updateBusiness(formData: FormData) {
   }
 
   // Actualizar el business
-  const businessData: any = {
+  const businessData: Partial<
+    Omit<Business, "id" | "created_at" | "business_social_links">
+  > = {
     name,
     slug,
     active,
@@ -233,17 +240,13 @@ export async function updateBusiness(formData: FormData) {
       // Identificar links nuevos (no están en la BD - IDs temporales o nuevos)
       const linksToInsert = newSocialLinks.filter(
         (link) =>
-          link.url &&
-          link.url.trim() !== "" &&
-          !existingLinksMap.has(link.id)
+          link.url && link.url.trim() !== "" && !existingLinksMap.has(link.id)
       );
 
       // Identificar links a actualizar (están en la BD y en el nuevo array)
       const linksToUpdate = newSocialLinks.filter(
         (link) =>
-          link.url &&
-          link.url.trim() !== "" &&
-          existingLinksMap.has(link.id)
+          link.url && link.url.trim() !== "" && existingLinksMap.has(link.id)
       );
 
       // Eliminar links

@@ -33,7 +33,6 @@ export const useProductEdit = (productId: string) => {
     formData,
     images,
     priceTiers,
-    slugManuallyEdited,
     error,
     setFormData,
     setImages,

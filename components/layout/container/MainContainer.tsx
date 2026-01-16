@@ -38,7 +38,7 @@ export const MainContainer = ({
           <Alert>
             <AlertTitle>No data</AlertTitle>
             <AlertDescription>
-              You don't have any data yet. Please add some data to get started.
+              You don&apos;t have any data yet. Please add some data to get started.
             </AlertDescription>
           </Alert>
         </div>

@@ -13,7 +13,6 @@ interface ImageDropzoneProps {
   maxSizeMB?: number;
   accept?: string;
   folder: string;
-  userId?: string;
 }
 
 export const ImageDropzone = ({
@@ -23,7 +22,6 @@ export const ImageDropzone = ({
   maxSizeMB = 5,
   accept = "image/*",
   folder,
-  userId,
 }: ImageDropzoneProps) => {
   const [isDragging, setIsDragging] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
@@ -173,9 +171,17 @@ export const ImageDropzone = ({
         </div>
       ) : (
         <div
+          role="button"
+          tabIndex={0}
           onDragOver={handleDragOver}
           onDragLeave={handleDragLeave}
           onDrop={handleDrop}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              handleClick();
+            }
+          }}
           className={cn(
             "border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-colors",
             isDragging

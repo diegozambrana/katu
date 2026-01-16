@@ -6,14 +6,14 @@ import { Catalog } from "@/types/Catalog";
 import { deleteCatalog } from "@/actions/catalog/CatalogActions";
 import { toast } from "sonner";
 
-export const useCatalogList = (initialCatalogs: any[]) => {
+export const useCatalogList = (initialCatalogs: Catalog[]) => {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [catalogToDelete, setCatalogToDelete] = useState<Catalog | null>(null);
   const { catalogList, loading, error, setCatalogList } = useCatalogListStore();
 
   useEffect(() => {
-    if (initialCatalogs) {
-      setCatalogList((initialCatalogs as Catalog[]) || []);
+    if (initialCatalogs?.length > 0) {
+      setCatalogList(initialCatalogs);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initialCatalogs]);

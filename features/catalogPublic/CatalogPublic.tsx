@@ -1,6 +1,7 @@
 "use client";
 
 import type { Catalog } from "@/types/Catalog";
+import type { Product } from "@/types/Products";
 import { CatalogSlider, CatalogSection, BusinessHeader } from "./components";
 import { Separator } from "@/components/ui/separator";
 
@@ -31,7 +32,7 @@ interface CatalogPublicProps {
         id: string;
         active: boolean;
         sort_order: number;
-        product: any;
+        product: Product;
       }>;
     }>;
     catalog_contacts?: Array<{

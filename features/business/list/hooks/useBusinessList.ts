@@ -1,10 +1,10 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useBusinessListStore } from "../stores/BusinessListStores";
 import { Business } from "@/types/Business";
 import { deleteBusiness } from "@/actions";
 import { toast } from "sonner";
 
-export const useBusinessList = (initialBusinesses: any[]) => {
+export const useBusinessList = (initialBusinesses: Business[]) => {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [businessToDelete, setBusinessToDelete] = useState<Business | null>(
     null
@@ -14,8 +14,8 @@ export const useBusinessList = (initialBusinesses: any[]) => {
 
   useEffect(() => {
     // Cargar los datos al montar el componente solo una vez
-    if (initialBusinesses) {
-      setBusinessList((initialBusinesses as Business[]) || []);
+    if (initialBusinesses?.length > 0) {
+      setBusinessList(initialBusinesses);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initialBusinesses]);

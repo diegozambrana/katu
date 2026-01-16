@@ -6,8 +6,16 @@ import { z } from "zod";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useTransition } from "react";
 import { useCatalogCreateStore } from "../../create/stores/CatalogCreateStore";
-import { updateCatalog, getCatalogById } from "@/actions/catalog/CatalogActions";
-import type { CatalogSlide, CatalogSection, CatalogContact } from "@/types/Catalog";
+import {
+  updateCatalog,
+  getCatalogById,
+} from "@/actions/catalog/CatalogActions";
+import type {
+  CatalogSlide,
+  CatalogSection,
+  CatalogContact,
+  CatalogSectionProduct,
+} from "@/types/Catalog";
 import { toast } from "sonner";
 
 const catalogSchema = z.object({
@@ -29,7 +37,6 @@ export const useCatalogEdit = (catalogId: string) => {
     slides,
     sections,
     contacts,
-    slugManuallyEdited,
     error,
     setFormData,
     setSlides,
@@ -77,7 +84,9 @@ export const useCatalogEdit = (catalogId: string) => {
         // Cargar slides
         if (catalog.catalog_slides && Array.isArray(catalog.catalog_slides)) {
           const convertedSlides = catalog.catalog_slides
-            .sort((a, b) => a.sort_order - b.sort_order)
+            .sort(
+              (a: CatalogSlide, b: CatalogSlide) => a.sort_order - b.sort_order
+            )
             .map((slide: CatalogSlide) => ({
               id: slide.id.toString(),
               image: slide.image || "",
@@ -92,29 +101,43 @@ export const useCatalogEdit = (catalogId: string) => {
         }
 
         // Cargar secciones con productos
-        if (catalog.catalog_sections && Array.isArray(catalog.catalog_sections)) {
+        if (
+          catalog.catalog_sections &&
+          Array.isArray(catalog.catalog_sections)
+        ) {
           const convertedSections = catalog.catalog_sections
-            .sort((a, b) => a.sort_order - b.sort_order)
+            .sort(
+              (a: CatalogSection, b: CatalogSection) =>
+                a.sort_order - b.sort_order
+            )
             .map((section: CatalogSection) => ({
               id: section.id,
               title: section.title,
               description: section.description,
               sort_order: section.sort_order,
               active: section.active,
-              products: (section.catalog_section_products || []).map((csp: any) => ({
-                id: csp.id,
-                product_id: csp.product_id,
-                sort_order: csp.sort_order,
-                active: csp.active,
-              })),
+              products: (section.catalog_section_products || []).map(
+                (csp: CatalogSectionProduct) => ({
+                  id: csp.id,
+                  product_id: csp.product_id,
+                  sort_order: csp.sort_order,
+                  active: csp.active,
+                })
+              ),
             }));
           setSections(convertedSections);
         }
 
         // Cargar contactos
-        if (catalog.catalog_contacts && Array.isArray(catalog.catalog_contacts)) {
+        if (
+          catalog.catalog_contacts &&
+          Array.isArray(catalog.catalog_contacts)
+        ) {
           const convertedContacts = catalog.catalog_contacts
-            .sort((a, b) => a.sort_order - b.sort_order)
+            .sort(
+              (a: CatalogContact, b: CatalogContact) =>
+                a.sort_order - b.sort_order
+            )
             .map((contact: CatalogContact) => ({
               id: contact.id,
               label: contact.label,
@@ -133,7 +156,15 @@ export const useCatalogEdit = (catalogId: string) => {
     };
 
     loadCatalog();
-  }, [catalogId, form, setFormData, setSlides, setSections, setContacts, setError]);
+  }, [
+    catalogId,
+    form,
+    setFormData,
+    setSlides,
+    setSections,
+    setContacts,
+    setError,
+  ]);
 
   const slugValue = form.watch("slug");
 

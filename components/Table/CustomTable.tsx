@@ -12,6 +12,10 @@ import {
   type ColumnFiltersState,
   type SortingState,
   type VisibilityState,
+  type Row,
+  type HeaderGroup,
+  type Header,
+  type Cell,
 } from "@tanstack/react-table";
 import {
   ChevronLeft,
@@ -75,7 +79,6 @@ export function CustomTable<TData extends object>({
   searchKey,
   pagination = true,
   pageSize = 10,
-  rowId = "id" as keyof TData & string,
 }: CustomTableProps<TData>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -90,7 +93,7 @@ export function CustomTable<TData extends object>({
     const cols: ColumnDef<TData>[] = columns.map((col) => ({
       accessorKey: col.accessorKey,
       header: typeof col.header === "string" ? col.header : () => col.header,
-      cell: ({ row }: { row: any }) => {
+      cell: ({ row }: { row: Row<TData> }) => {
         const colDef = columns.find((c) => c.accessorKey === col.accessorKey);
         if (!colDef) return null;
 
@@ -115,7 +118,7 @@ export function CustomTable<TData extends object>({
       cols.push({
         id: "actions",
         enableHiding: false,
-        cell: ({ row }: { row: any }) => {
+        cell: ({ row }: { row: Row<TData> }) => {
           const rowData = row.original;
 
           return (
@@ -223,9 +226,9 @@ export function CustomTable<TData extends object>({
       <div className="overflow-hidden rounded-md border">
         <Table>
           <TableHeader>
-            {table.getHeaderGroups().map((headerGroup: any) => (
+            {table.getHeaderGroups().map((headerGroup: HeaderGroup<TData>) => (
               <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header: any) => {
+                {headerGroup.headers.map((header: Header<TData, unknown>) => {
                   return (
                     <TableHead key={header.id}>
                       {header.isPlaceholder
@@ -242,12 +245,12 @@ export function CustomTable<TData extends object>({
           </TableHeader>
           <TableBody>
             {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row: any) => (
+              table.getRowModel().rows.map((row: Row<TData>) => (
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
                 >
-                  {row.getVisibleCells().map((cell: any) => (
+                  {row.getVisibleCells().map((cell: Cell<TData, unknown>) => (
                     <TableCell key={cell.id}>
                       {flexRender(
                         cell.column.columnDef.cell,

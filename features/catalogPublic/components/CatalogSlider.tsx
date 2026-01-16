@@ -79,9 +79,9 @@ export const CatalogSlider = ({ slides }: CatalogSliderProps) => {
       {/* Dots indicator */}
       {slides.length > 1 && (
         <div className="flex justify-center gap-2 mt-4">
-          {slides.map((_, index) => (
+          {slides.map((slide) => (
             <div
-              key={index}
+              key={slide.id}
               className="w-2 h-2 rounded-full bg-muted-foreground/30"
             />
           ))}

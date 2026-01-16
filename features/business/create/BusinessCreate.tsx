@@ -314,7 +314,8 @@ export const BusinessCreate = () => {
                     <div className="space-y-0.5">
                       <FormLabel className="text-base">Active</FormLabel>
                       <FormDescription>
-                        If inactive, the business won't be publicly visible.
+                        If inactive, the business won&apos;t be publicly
+                        visible.
                       </FormDescription>
                     </div>
                     <FormControl>

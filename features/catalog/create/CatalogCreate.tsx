@@ -117,7 +117,10 @@ export const CatalogCreate = ({ businesses, products }: CatalogCreateProps) => {
                       <span className="text-destructive">*</span>
                     </FormLabel>
                     <FormControl>
-                      <Input placeholder="Ej: Spring Collection 2024" {...field} />
+                      <Input
+                        placeholder="Ej: Spring Collection 2024"
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -190,8 +193,8 @@ export const CatalogCreate = ({ businesses, products }: CatalogCreateProps) => {
             <CardHeader>
               <CardTitle>Secciones y Productos</CardTitle>
               <p className="text-sm text-muted-foreground">
-                Organiza tus productos en secciones (ej: "Ropa de Mujer",
-                "Accesorios")
+                Organiza tus productos en secciones (ej: &quot;Ropa de
+                Mujer&quot;, &quot;Accesorios&quot;)
               </p>
             </CardHeader>
             <CardContent>
