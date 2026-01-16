@@ -5,3 +5,7 @@ const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string;
 
 export const createClient = () =>
   createBrowserClient(supabaseUrl, supabaseAnonKey);
+
+console.log("~~~~createClient ", createClient);
+console.log(supabaseUrl);
+console.log(supabaseAnonKey);
