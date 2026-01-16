@@ -43,7 +43,12 @@ export async function createProduct(formData: FormData) {
   const active = formData.get("active") === "true";
   const business_id = formData.get("business_id") as string;
 
-  const productData: Partial<Omit<Product, 'id' | 'created_at' | 'updated_at' | 'product_prices' | 'product_images'>> = {
+  const productData: Partial<
+    Omit<
+      Product,
+      "id" | "created_at" | "updated_at" | "product_prices" | "product_images"
+    >
+  > = {
     name,
     slug,
     user_id: user.id,
@@ -73,7 +78,9 @@ export async function createProduct(formData: FormData) {
 
       if (Array.isArray(images) && images.length > 0) {
         const imagesData = images
-          .filter((img: Partial<ProductImage>) => img.image && img.image.trim() !== "")
+          .filter(
+            (img: Partial<ProductImage>) => img.image && img.image.trim() !== ""
+          )
           .map((img: Partial<ProductImage>) => ({
             product_id: product.id,
             image: img.image,
@@ -178,7 +185,9 @@ export async function updateProduct(formData: FormData) {
   }
 
   // Actualizar el producto
-  const productData: Partial<Omit<Product, 'id' | 'created_at' | 'product_prices' | 'product_images'>> = {
+  const productData: Partial<
+    Omit<Product, "id" | "created_at" | "product_prices" | "product_images">
+  > = {
     name,
     slug,
     active,
@@ -237,17 +246,13 @@ export async function updateProduct(formData: FormData) {
       // Identificar imágenes nuevas
       const imagesToInsert = newImages.filter(
         (img) =>
-          img.image &&
-          img.image.trim() !== "" &&
-          !existingImagesMap.has(img.id)
+          img.image && img.image.trim() !== "" && !existingImagesMap.has(img.id)
       );
 
       // Identificar imágenes a actualizar
       const imagesToUpdate = newImages.filter(
         (img) =>
-          img.image &&
-          img.image.trim() !== "" &&
-          existingImagesMap.has(img.id)
+          img.image && img.image.trim() !== "" && existingImagesMap.has(img.id)
       );
 
       // Eliminar imágenes
@@ -336,17 +341,12 @@ export async function updateProduct(formData: FormData) {
       // Identificar precios nuevos
       const pricesToInsert = newPrices.filter(
         (price) =>
-          price.label &&
-          price.price &&
-          !existingPricesMap.has(price.id)
+          price.label && price.price && !existingPricesMap.has(price.id)
       );
 
       // Identificar precios a actualizar
       const pricesToUpdate = newPrices.filter(
-        (price) =>
-          price.label &&
-          price.price &&
-          existingPricesMap.has(price.id)
+        (price) => price.label && price.price && existingPricesMap.has(price.id)
       );
 
       // Eliminar precios
