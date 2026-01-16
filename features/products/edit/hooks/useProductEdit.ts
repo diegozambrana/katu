@@ -94,7 +94,7 @@ export const useProductEdit = (productId: string) => {
         // Convertir product_images a ProductImageData[]
         if (product.product_images && Array.isArray(product.product_images)) {
           const convertedImages: ProductImageData[] = product.product_images
-            .sort((a, b) => a.display_order - b.display_order)
+            .sort((a: ProductImage, b: ProductImage) => a.display_order - b.display_order)
             .map((img: ProductImage) => ({
               id: img.id,
               image: img.image,
@@ -110,7 +110,7 @@ export const useProductEdit = (productId: string) => {
         // Convertir product_prices a PriceTierData[]
         if (product.product_prices && Array.isArray(product.product_prices)) {
           const convertedPrices: PriceTierData[] = product.product_prices
-            .sort((a, b) => a.sort_order - b.sort_order)
+            .sort((a: ProductPrice, b: ProductPrice) => a.sort_order - b.sort_order)
             .map((price: ProductPrice) => ({
               id: price.id,
               label: price.label,

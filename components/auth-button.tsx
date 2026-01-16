@@ -13,7 +13,10 @@ export async function AuthButton() {
 
   return user ? (
     <div className="flex items-center gap-4">
-      Hey, {user.email}!
+      Hey, {user.email?.split("@")[0] || "User"}!
+      <Button asChild size="sm" variant={"outline"}>
+        <Link href="/dashboard">Dashboard</Link>
+      </Button>
       <LogoutButton />
     </div>
   ) : (

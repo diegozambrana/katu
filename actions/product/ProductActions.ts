@@ -106,8 +106,8 @@ export async function createProduct(formData: FormData) {
           .filter((price: Partial<ProductPrice>) => price.label && price.price)
           .map((price: Partial<ProductPrice>) => ({
             product_id: product.id,
-            label: price.label,
-            price: parseFloat(price.price.toString()),
+            label: price.label!,
+            price: parseFloat(price.price!.toString()),
             sort_order: price.sort_order || 0,
             active: price.active !== false,
           }));
