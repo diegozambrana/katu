@@ -12,12 +12,11 @@ import {
   Mail,
   Globe,
   MapPin,
-  Copy,
-  ExternalLink,
   Coffee,
 } from "lucide-react";
 import { getSocialMediaByValue } from "@/constants/socialMedia";
 import { useRouter } from "next/navigation";
+import { PublicURLCard } from "@/components/PublicURL";
 
 interface BusinessDetailProps {
   businessId: string;
@@ -61,8 +60,6 @@ export const BusinessDetail = ({ businessId }: BusinessDetailProps) => {
         .sort((a, b) => a.sort_order - b.sort_order)
     : [];
 
-  const publicUrl = `catalogo.app/b/${business.slug}`;
-
   const formatTimeAgo = (dateString: string) => {
     if (!dateString) return "2 hours ago";
     const date = new Date(dateString);
@@ -80,10 +77,6 @@ export const BusinessDetail = ({ businessId }: BusinessDetailProps) => {
   };
 
   const lastUpdated = formatTimeAgo(business.udpated_at);
-
-  const handleCopyUrl = async () => {
-    await navigator.clipboard.writeText(publicUrl);
-  };
 
   return (
     <MainContainer
@@ -311,34 +304,7 @@ export const BusinessDetail = ({ businessId }: BusinessDetailProps) => {
             </Card>
 
             {/* Public URL */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Public URL</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <p className="text-sm text-muted-foreground">
-                  Your public catalog page:
-                </p>
-                <div className="flex items-center gap-2 p-3 bg-muted rounded-lg">
-                  <code className="text-sm flex-1">{publicUrl}</code>
-                </div>
-                <div className="flex gap-2">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={handleCopyUrl}
-                    className="flex-1"
-                  >
-                    <Copy className="mr-2 h-4 w-4" />
-                    Copy URL
-                  </Button>
-                  <Button variant="outline" size="sm" className="flex-1">
-                    <ExternalLink className="mr-2 h-4 w-4" />
-                    Visit Page
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
+            <PublicURLCard slug={business.slug} />
 
             {/* Recent Activity */}
             <Card>

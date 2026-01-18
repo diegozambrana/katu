@@ -5,8 +5,9 @@ import { MainContainer } from "@/components/layout/container";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Edit, Eye, Copy, ExternalLink } from "lucide-react";
+import { Edit, Eye } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { PublicURLCard } from "@/components/PublicURL";
 
 interface CatalogDetailProps {
   catalogId: string;
@@ -39,12 +40,6 @@ export const CatalogDetail = ({ catalogId }: CatalogDetailProps) => {
     (acc, section) => acc + (section.catalog_section_products?.length || 0),
     0
   );
-
-  const publicUrl = `catalogo.app/c/${catalog.slug}`;
-
-  const handleCopyUrl = async () => {
-    await navigator.clipboard.writeText(publicUrl);
-  };
 
   return (
     <MainContainer
@@ -180,33 +175,12 @@ export const CatalogDetail = ({ catalogId }: CatalogDetailProps) => {
             </Card>
 
             {/* Public URL */}
-            <Card>
-              <CardHeader>
-                <CardTitle>URL Pública</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="flex items-center gap-2 p-3 bg-muted rounded-lg">
-                  <code className="text-sm flex-1 overflow-hidden text-ellipsis">
-                    {publicUrl}
-                  </code>
-                </div>
-                <div className="flex gap-2">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={handleCopyUrl}
-                    className="flex-1"
-                  >
-                    <Copy className="mr-2 h-4 w-4" />
-                    Copiar
-                  </Button>
-                  <Button variant="outline" size="sm" className="flex-1">
-                    <ExternalLink className="mr-2 h-4 w-4" />
-                    Visitar
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
+            <PublicURLCard
+              slug={catalog.slug}
+              pathPrefix="c"
+              title="URL Pública"
+              description="Tu página pública del catálogo:"
+            />
           </div>
         </div>
       </div>
