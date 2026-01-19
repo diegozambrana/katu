@@ -60,10 +60,19 @@ export const CatalogPublic = ({ catalog }: CatalogPublicProps) => {
   const activeContacts =
     catalog.catalog_contacts?.filter((c) => c.active) || [];
 
+  const navSections = activeSections.map((section) => ({
+    id: section.id,
+    title: section.title,
+  }));
+
+  const domain = process.env.NEXT_PUBLIC_PUBLIC_DOMAIN || "catalogo.cc";
+
   return (
     <div className="min-h-screen bg-background">
       {/* Business Header */}
-      {catalog.business && <BusinessHeader business={catalog.business} />}
+      {catalog.business && (
+        <BusinessHeader business={catalog.business} sections={navSections} />
+      )}
 
       <main className="container mx-auto px-4 py-8 md:py-12">
         {/* Catalog Header */}
@@ -93,7 +102,7 @@ export const CatalogPublic = ({ catalog }: CatalogPublicProps) => {
           <>
             <Separator className="my-12" />
             <div className="text-center">
-              <h3 className="text-xl md:text-2xl font-bold mb-6">Contact Us</h3>
+              <h3 className="text-xl md:text-2xl font-bold mb-6">Contactanos</h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 max-w-3xl mx-auto">
                 {activeContacts.map((contact) => (
                   <div
@@ -117,7 +126,7 @@ export const CatalogPublic = ({ catalog }: CatalogPublicProps) => {
             © {new Date().getFullYear()}{" "}
             {catalog.business?.name || catalog.name}. All rights reserved.
           </p>
-          <p className="mt-1">Powered by Catalogo Manager</p>
+          <p className="mt-1">Powered by <a className="font-bold hover:underline" href={domain} target="_blank" rel="noreferrer">Catalogo</a></p>
         </footer>
       </main>
     </div>

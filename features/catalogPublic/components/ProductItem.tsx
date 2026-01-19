@@ -1,9 +1,9 @@
 "use client";
 
 import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+// import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ShoppingCart } from "lucide-react";
+// import { ShoppingCart } from "lucide-react";
 
 interface ProductPrice {
   id: string;
@@ -77,9 +77,9 @@ export const ProductItem = ({ product }: ProductItemProps) => {
           {/* Base Price */}
           {product.base_price !== null && (
             <div className="flex items-center justify-between text-sm">
-              <span className="text-muted-foreground">Unit:</span>
+              <span className="text-muted-foreground">Precio:</span>
               <span className="font-bold">
-                ${product.base_price.toFixed(2)}
+                {product.base_price.toFixed(2)} {product.currency || "Bs"}{" "}
               </span>
             </div>
           )}
@@ -92,18 +92,17 @@ export const ProductItem = ({ product }: ProductItemProps) => {
             >
               <span className="text-muted-foreground">{priceItem.label}:</span>
               <span className="font-semibold text-emerald-600">
-                ${priceItem.price.toFixed(2)}{" "}
-                <span className="text-xs">ea</span>
+                {priceItem.price.toFixed(2)} {product.currency || "Bs"}{" "}
               </span>
             </div>
           ))}
         </div>
 
         {/* Add to Cart Button */}
-        <Button className="w-full mt-4" size="sm">
+        {/* <Button className="w-full mt-4" size="sm">
           <ShoppingCart className="mr-2 h-4 w-4" />
           Add to Cart
-        </Button>
+        </Button> */}
       </CardContent>
     </Card>
   );
