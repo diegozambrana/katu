@@ -3,8 +3,8 @@
 import { useState, useRef, DragEvent, ChangeEvent } from "react";
 import { Button } from "@/components/ui/button";
 import { Upload, X, Image as ImageIcon } from "lucide-react";
-import { createClient } from "@/utils/supabase/client";
 import { cn } from "@/lib/utils";
+import { uploadImageToSupabase } from "@/utils/imageUpload";
 
 interface ImageDropzoneProps {
   label: string;
@@ -13,6 +13,7 @@ interface ImageDropzoneProps {
   maxSizeMB?: number;
   accept?: string;
   folder: string;
+  bucket?: string; // Bucket de Supabase Storage, por defecto "businesses"
 }
 
 export const ImageDropzone = ({
@@ -22,68 +23,31 @@ export const ImageDropzone = ({
   maxSizeMB = 5,
   accept = "image/*",
   folder,
+  bucket = "businesses",
 }: ImageDropzoneProps) => {
   const [isDragging, setIsDragging] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const validateFile = (file: File): string | null => {
-    const maxSizeBytes = maxSizeMB * 1024 * 1024;
-    if (file.size > maxSizeBytes) {
-      return `El archivo es demasiado grande. Tamaño máximo: ${maxSizeMB}MB`;
-    }
-    if (!file.type.startsWith("image/")) {
-      return "El archivo debe ser una imagen";
-    }
-    return null;
-  };
-
   const uploadImage = async (file: File) => {
     setIsUploading(true);
     setError(null);
 
-    const validationError = validateFile(file);
-    if (validationError) {
-      setError(validationError);
-      setIsUploading(false);
-      return;
+    const result = await uploadImageToSupabase({
+      file,
+      folder,
+      bucket,
+      maxSizeMB,
+    });
+
+    if (result.success && result.url) {
+      onChange(result.url);
+    } else {
+      setError(result.error || "Error al subir la imagen");
     }
 
-    try {
-      const supabase = createClient();
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-
-      if (!user) {
-        throw new Error("Usuario no autenticado");
-      }
-
-      const fileExt = file.name.split(".").pop();
-      const fileName = `${folder}/${user.id}-${Date.now()}.${fileExt}`;
-
-      const { error: uploadError } = await supabase.storage
-        .from("businesses")
-        .upload(fileName, file, {
-          cacheControl: "3600",
-          upsert: false,
-        });
-
-      if (uploadError) {
-        throw uploadError;
-      }
-
-      const {
-        data: { publicUrl },
-      } = supabase.storage.from("businesses").getPublicUrl(fileName);
-
-      onChange(publicUrl);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Error al subir la imagen");
-    } finally {
-      setIsUploading(false);
-    }
+    setIsUploading(false);
   };
 
   const handleDragOver = (e: DragEvent<HTMLDivElement>) => {
