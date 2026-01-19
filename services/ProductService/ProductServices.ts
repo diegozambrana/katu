@@ -6,7 +6,17 @@ export class ProductServices {
   async getProductsByUserId(userId: string) {
     const { data, error } = await this.supabase
       .from("products")
-      .select("*")
+      .select(
+        `
+        *,
+        product_images (
+          id,
+          image,
+          image_caption,
+          is_primary
+        )
+      `
+      )
       .eq("user_id", userId)
       .order("created_at", { ascending: false });
 

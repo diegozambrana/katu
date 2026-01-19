@@ -8,7 +8,7 @@ import {
 } from "@/components/Table";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
+import { ImageIcon, Plus } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { ConfirmDialog } from "@/components/Dialog";
 import { useProductList } from "./hooks/useProductList";
@@ -32,6 +32,21 @@ export const ProductList = ({ initialProducts }: Props) => {
   } = useProductList(initialProducts);
 
   const columns: CustomTableColumn<Product>[] = [
+    {
+      accessorKey: "image",
+      header: "IMAGEN",
+      value: (row) => row.product_images?.[0]?.image ?(
+        <div className="w-10 h-10 bg-muted rounded-lg overflow-hidden flex-shrink-0">
+        <img
+          src={row.product_images?.[0]?.image}
+          alt={row.product_images?.[0]?.image_caption || row.name}
+          className="w-full h-full object-cover"
+        />
+      </div>
+      ) : <div className="w-10 h-10 bg-gray-200 rounded-md flex items-center justify-center">
+        <ImageIcon className="w-4 h-4 text-gray-500" />
+      </div>
+    },
     {
       accessorKey: "name",
       header: "NOMBRE",
