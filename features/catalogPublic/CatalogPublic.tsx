@@ -60,19 +60,12 @@ export const CatalogPublic = ({ catalog }: CatalogPublicProps) => {
   const activeContacts =
     catalog.catalog_contacts?.filter((c) => c.active) || [];
 
-  const navSections = activeSections.map((section) => ({
-    id: section.id,
-    title: section.title,
-  }));
-
   const domain = process.env.NEXT_PUBLIC_PUBLIC_DOMAIN || "catalogo.cc";
 
   return (
     <div className="min-h-screen bg-background">
       {/* Business Header */}
-      {catalog.business && (
-        <BusinessHeader business={catalog.business} sections={navSections} />
-      )}
+      {catalog.business && <BusinessHeader business={catalog.business} />}
 
       <main className="container mx-auto px-4 py-8 md:py-12">
         {/* Catalog Header */}
