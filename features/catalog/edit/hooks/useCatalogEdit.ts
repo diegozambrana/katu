@@ -116,14 +116,19 @@ export const useCatalogEdit = (catalogId: string) => {
               description: section.description,
               sort_order: section.sort_order,
               active: section.active,
-              products: (section.catalog_section_products || []).map(
-                (csp: CatalogSectionProduct) => ({
+              products: (section.catalog_section_products || [])
+                .sort(
+                  (
+                    a: CatalogSectionProduct,
+                    b: CatalogSectionProduct
+                  ) => a.sort_order - b.sort_order
+                )
+                .map((csp: CatalogSectionProduct) => ({
                   id: csp.id,
                   product_id: csp.product_id,
                   sort_order: csp.sort_order,
                   active: csp.active,
-                })
-              ),
+                })),
             }));
           setSections(convertedSections);
         }

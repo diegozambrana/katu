@@ -56,6 +56,7 @@ export const CatalogPublic = ({ catalog }: CatalogPublicProps) => {
     catalog.catalog_sections
       ?.filter((s) => s.active)
       .sort((a, b) => a.sort_order - b.sort_order) || [];
+  
 
   const activeContacts =
     catalog.catalog_contacts?.filter((c) => c.active) || [];
