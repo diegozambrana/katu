@@ -52,30 +52,6 @@ export const ProductList = ({ initialProducts }: Props) => {
       header: "NOMBRE",
     },
     {
-      accessorKey: "slug",
-      header: "SLUG",
-    },
-    {
-      accessorKey: "base_price",
-      header: "PRECIO BASE",
-      value: (row) => (
-        <span>
-          {row.base_price
-            ? `${row.base_price} ${row.currency || "BOB"}`
-            : "N/A"}
-        </span>
-      ),
-    },
-    {
-      accessorKey: "is_on_sale",
-      header: "EN OFERTA",
-      value: (row) => (
-        <Badge variant={row.is_on_sale ? "default" : "outline"}>
-          {row.is_on_sale ? "Sí" : "No"}
-        </Badge>
-      ),
-    },
-    {
       accessorKey: "active",
       header: "ACTIVO",
       value: (row) => (

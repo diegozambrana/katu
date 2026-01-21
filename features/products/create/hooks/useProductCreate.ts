@@ -4,9 +4,11 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useRouter } from "next/navigation";
-import { useEffect, useTransition } from "react";
+import { useEffect, useRef, useTransition } from "react";
 import { useProductCreateStore } from "../stores/ProductCreateStore";
-import { createProduct } from "@/actions/product/ProductActions";
+import { createProduct, updateProduct, getProductById } from "@/actions/product/ProductActions";
+import { ProductImageData, PriceTierData } from "../components";
+import type { ProductPrice, ProductImage } from "@/types/Products";
 import { toast } from "sonner";
 
 const productSchema = z.object({
@@ -23,15 +25,17 @@ const productSchema = z.object({
 
 type ProductFormValues = z.infer<typeof productSchema>;
 
-export const useProductCreate = () => {
+export const useProductCreate = (productId?: string) => {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
+  const hasLoaded = useRef(false);
   const {
     formData,
     images,
     priceTiers,
     slugManuallyEdited,
     error,
+    setFormData,
     setImages,
     setPriceTiers,
     setSlugManuallyEdited,
@@ -57,9 +61,92 @@ export const useProductCreate = () => {
   const nameValue = form.watch("name");
   const slugValue = form.watch("slug");
 
-  // Generar slug automáticamente desde el nombre
+  // Cargar datos del producto si estamos en modo edición
   useEffect(() => {
-    if (!slugManuallyEdited && nameValue) {
+    if (!productId || hasLoaded.current) return;
+
+    const loadProduct = async () => {
+      try {
+        hasLoaded.current = true;
+        const product = await getProductById(productId);
+
+        // Cargar datos del formulario
+        setFormData({
+          name: product.name || "",
+          slug: product.slug || "",
+          description: product.description || "",
+          base_price: product.base_price?.toString() || "",
+          currency: product.currency || "BOB",
+          is_on_sale: product.is_on_sale ?? false,
+          sale_label: product.sale_label || "",
+          active: product.active ?? true,
+          business_id: product.business_id || "",
+        });
+
+        // Actualizar el formulario
+        form.reset({
+          name: product.name || "",
+          slug: product.slug || "",
+          description: product.description || "",
+          base_price: product.base_price?.toString() || "",
+          currency: product.currency || "BOB",
+          is_on_sale: product.is_on_sale ?? false,
+          sale_label: product.sale_label || "",
+          active: product.active ?? true,
+          business_id: product.business_id || "",
+        });
+
+        // Convertir product_images a ProductImageData[]
+        if (product.product_images && Array.isArray(product.product_images)) {
+          const convertedImages: ProductImageData[] = product.product_images
+            .sort((a: ProductImage, b: ProductImage) => a.display_order - b.display_order)
+            .map((img: ProductImage) => ({
+              id: img.id,
+              image: img.image,
+              image_caption: img.image_caption,
+              display_order: img.display_order,
+              is_primary: img.is_primary,
+            }));
+          setImages(convertedImages);
+        } else {
+          setImages([]);
+        }
+
+        // Convertir product_prices a PriceTierData[]
+        if (product.product_prices && Array.isArray(product.product_prices)) {
+          const convertedPrices: PriceTierData[] = product.product_prices
+            .sort((a: ProductPrice, b: ProductPrice) => a.sort_order - b.sort_order)
+            .map((price: ProductPrice) => ({
+              id: price.id,
+              label: price.label,
+              price: price.price,
+              sort_order: price.sort_order,
+              active: price.active,
+            }));
+          setPriceTiers(convertedPrices);
+        } else {
+          setPriceTiers([]);
+        }
+      } catch (err) {
+        setError(
+          err instanceof Error ? err.message : "Error al cargar el producto"
+        );
+      }
+    };
+
+    loadProduct();
+  }, [productId, form, setFormData, setImages, setPriceTiers, setError]);
+
+  useEffect(() => {
+    return () => {
+      console.log("~~~~resetting");
+      reset();
+    }
+  },[])
+
+  // Generar slug automáticamente desde el nombre (solo en modo creación)
+  useEffect(() => {
+    if (!productId && !slugManuallyEdited && nameValue) {
       const generatedSlug = nameValue
         .toLowerCase()
         .normalize("NFD")
@@ -68,7 +155,7 @@ export const useProductCreate = () => {
         .replace(/(^-|-$)/g, "");
       form.setValue("slug", generatedSlug);
     }
-  }, [nameValue, slugManuallyEdited, form]);
+  }, [productId, nameValue, slugManuallyEdited, form]);
 
   const handleSlugChange = (value: string) => {
     setSlugManuallyEdited(true);
@@ -84,7 +171,11 @@ export const useProductCreate = () => {
   };
 
   const handleCancel = () => {
-    router.push("/product");
+    if (productId) {
+      router.push(`/product/${productId}`);
+    } else {
+      router.push("/product");
+    }
   };
 
   const onSubmit = async (data: ProductFormValues) => {
@@ -92,6 +183,11 @@ export const useProductCreate = () => {
     startTransition(async () => {
       try {
         const formDataToSend = new FormData();
+        
+        if (productId) {
+          formDataToSend.append("product_id", productId);
+        }
+        
         formDataToSend.append("name", data.name);
         formDataToSend.append("slug", data.slug);
         if (data.description)
@@ -113,15 +209,23 @@ export const useProductCreate = () => {
           formDataToSend.append("prices", JSON.stringify(priceTiers));
         }
 
-        const result = await createProduct(formDataToSend);
-        toast.success("Producto creado exitosamente");
-        reset();
-        router.push(`/product/${result.id}`);
+        if (productId) {
+          // Modo edición
+          await updateProduct(formDataToSend);
+          toast.success("Producto actualizado exitosamente");
+          router.push(`/product/${productId}`);
+        } else {
+          // Modo creación
+          const result = await createProduct(formDataToSend);
+          toast.success("Producto creado exitosamente");
+          reset();
+          router.push(`/product/${result.id}`);
+        }
       } catch (err) {
         setError(
-          err instanceof Error ? err.message : "Error al crear el producto"
+          err instanceof Error ? err.message : (productId ? "Error al actualizar el producto" : "Error al crear el producto")
         );
-        toast.error("Error al crear producto");
+        toast.error(productId ? "Error al actualizar producto" : "Error al crear producto");
       }
     });
   };

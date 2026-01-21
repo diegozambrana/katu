@@ -29,9 +29,10 @@ import { ProductPriceTiersManager } from "./components/ProductPriceTiersManager"
 
 interface ProductCreateProps {
   businesses: Array<{ id: string; name: string }>;
+  productId?: string;
 }
 
-export const ProductCreate = ({ businesses }: ProductCreateProps) => {
+export const ProductCreate = ({ businesses, productId }: ProductCreateProps) => {
   const {
     form,
     images,
@@ -44,13 +45,17 @@ export const ProductCreate = ({ businesses }: ProductCreateProps) => {
     handlePriceTiersChange,
     handleCancel,
     onSubmit,
-  } = useProductCreate();
+  } = useProductCreate(productId);
+
+  const isEditMode = !!productId;
 
   return (
-    <MainContainer title="Crear Producto">
+    <MainContainer title={isEditMode ? "Editar Producto" : "Crear Producto"}>
       <div className="mb-6">
         <p className="text-sm text-muted-foreground">
-          Agrega un nuevo producto a tu catálogo
+          {isEditMode
+            ? "Actualiza la información de tu producto"
+            : "Agrega un nuevo producto a tu catálogo"}
         </p>
       </div>
       <Form {...form}>
@@ -68,35 +73,37 @@ export const ProductCreate = ({ businesses }: ProductCreateProps) => {
               <CardTitle>Información Básica</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <FormField
-                control={form.control}
-                name="business_id"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>
-                      Negocio <span className="text-destructive">*</span>
-                    </FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Selecciona un negocio" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {businesses.map((business) => (
-                          <SelectItem key={business.id} value={business.id}>
-                            {business.name}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              {!isEditMode && (
+                <FormField
+                  control={form.control}
+                  name="business_id"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>
+                        Negocio <span className="text-destructive">*</span>
+                      </FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Selecciona un negocio" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {businesses.map((business) => (
+                            <SelectItem key={business.id} value={business.id}>
+                              {business.name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              )}
 
               <FormField
                 control={form.control}
@@ -336,7 +343,10 @@ export const ProductCreate = ({ businesses }: ProductCreateProps) => {
               Cancelar
             </Button>
             <Button type="submit" disabled={isPending}>
-              {isPending ? "Guardando..." : "Guardar Producto"}
+              {(() => {
+                if (isPending) return "Guardando...";
+                return isEditMode ? "Guardar Cambios" : "Guardar Producto";
+              })()}
             </Button>
           </div>
         </form>

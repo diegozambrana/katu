@@ -62,12 +62,12 @@ export const useProductCreateStore = create<ProductCreateState>((set) => ({
 
   setError: (error) => set({ error }),
 
-  reset: () =>
-    set({
+  reset: () =>{
+    return set({
       formData: defaultFormData,
       images: [],
       priceTiers: [],
       slugManuallyEdited: false,
       error: null,
-    }),
+    })},
 }));

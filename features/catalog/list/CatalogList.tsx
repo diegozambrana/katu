@@ -8,11 +8,12 @@ import {
 } from "@/components/Table";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
+import { LinkIcon, Plus } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { ConfirmDialog } from "@/components/Dialog";
 import { useCatalogList } from "./hooks/useCatalogList";
 import type { Catalog } from "@/types/Catalog";
+import Link from "next/link";
 
 interface Props {
   initialCatalogs: Catalog[];
@@ -38,7 +39,17 @@ export const CatalogList = ({ initialCatalogs }: Props) => {
     },
     {
       accessorKey: "slug",
-      header: "SLUG",
+      header: "Public URL",
+      value: (row) => (
+        <Link
+          href={`/c/${row.slug}`}
+          target="_blank"
+          className="inline-flex items-center gap-2 text-sm px-3 py-1 rounded-md border border-input bg-background hover:bg-accent hover:text-accent-foreground transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+        >
+          <LinkIcon className="w-4 h-4" />
+          {`/c/${row.slug}`}
+        </Link>
+      ),
     },
     {
       accessorKey: "active",
