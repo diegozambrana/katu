@@ -56,8 +56,8 @@ export const BusinessDetail = ({ businessId }: BusinessDetailProps) => {
   // Obtener social links del business, ordenados por sort_order
   const socialLinks = business.business_social_links
     ? [...business.business_social_links]
-        .filter((link) => link.active) // Solo mostrar links activos
-        .sort((a, b) => a.sort_order - b.sort_order)
+      .filter((link) => link.active) // Solo mostrar links activos
+      .sort((a, b) => a.sort_order - b.sort_order)
     : [];
 
   const formatTimeAgo = (dateString: string) => {
@@ -304,7 +304,9 @@ export const BusinessDetail = ({ businessId }: BusinessDetailProps) => {
             </Card>
 
             {/* Public URL */}
-            <PublicURLCard slug={business.slug} />
+            <div className="hidden">
+              <PublicURLCard slug={business.slug} />
+            </div>
 
             {/* Recent Activity */}
             <Card>

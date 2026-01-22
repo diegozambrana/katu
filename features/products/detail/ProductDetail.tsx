@@ -5,7 +5,7 @@ import { MainContainer } from "@/components/layout/container";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Edit, Eye, Copy, ExternalLink } from "lucide-react";
+import { Edit, Eye } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 interface ProductDetailProps {
@@ -47,8 +47,8 @@ export const ProductDetail = ({ productId }: ProductDetailProps) => {
   // Ordenar precios por sort_order
   const sortedPrices = product.product_prices
     ? [...product.product_prices]
-        .filter((price) => price.active)
-        .sort((a, b) => a.sort_order - b.sort_order)
+      .filter((price) => price.active)
+      .sort((a, b) => a.sort_order - b.sort_order)
     : [];
 
   const publicUrl = `catalogo.app/p/${product.slug}`;
@@ -238,36 +238,7 @@ export const ProductDetail = ({ productId }: ProductDetailProps) => {
             </Card>
 
             {/* Public URL */}
-            <Card>
-              <CardHeader>
-                <CardTitle>URL Pública</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <p className="text-sm text-muted-foreground">
-                  Tu página pública del producto:
-                </p>
-                <div className="flex items-center gap-2 p-3 bg-muted rounded-lg">
-                  <code className="text-sm flex-1 overflow-hidden text-ellipsis">
-                    {publicUrl}
-                  </code>
-                </div>
-                <div className="flex gap-2">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={handleCopyUrl}
-                    className="flex-1"
-                  >
-                    <Copy className="mr-2 h-4 w-4" />
-                    Copiar
-                  </Button>
-                  <Button variant="outline" size="sm" className="flex-1">
-                    <ExternalLink className="mr-2 h-4 w-4" />
-                    Visitar
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
+
 
             {/* Quick Actions */}
             <Card>
