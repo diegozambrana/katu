@@ -66,7 +66,10 @@ export const CatalogPublic = ({ catalog }: CatalogPublicProps) => {
   return (
     <div className="min-h-screen bg-background">
       {/* Business Header */}
-      {catalog.business && <BusinessHeader business={catalog.business} />}
+      {catalog.business && <BusinessHeader business={catalog.business} sections={catalog.catalog_sections?.map((section) => ({
+        id: section.id,
+        title: section.title,
+      }))} />}
 
       <main className="container mx-auto px-4 py-8 md:py-12">
         {/* Catalog Header */}

@@ -20,8 +20,31 @@ interface BusinessHeaderProps {
 export const BusinessHeader = ({ business, sections }: BusinessHeaderProps) => {
   const handleScrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth", block: "start" });
+    if (!element) return;
+
+    // Encontrar el contenedor con scroll (puede ser window o un elemento con overflow)
+    const scrollContainer = document.querySelector('[class*="overflow-y-auto"]');
+    
+    if (scrollContainer && scrollContainer instanceof HTMLElement) {
+      // Si el scroll está en un contenedor
+      const containerRect = scrollContainer.getBoundingClientRect();
+      const elementRect = element.getBoundingClientRect();
+      const scrollTop = scrollContainer.scrollTop;
+      const offsetPosition = elementRect.top - containerRect.top + scrollTop - 100;
+      
+      scrollContainer.scrollTo({
+        top: Math.max(0, offsetPosition),
+        behavior: "smooth",
+      });
+    } else {
+      // Si el scroll está en window
+      const elementPosition = element.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + globalThis.pageYOffset - 100;
+      
+      globalThis.scrollTo({
+        top: Math.max(0, offsetPosition),
+        behavior: "smooth",
+      });
     }
   };
 

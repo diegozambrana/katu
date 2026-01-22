@@ -73,7 +73,7 @@ export const ProductItem = ({ product }: ProductItemProps) => {
         )}
 
         {/* Pricing */}
-        <div className="space-y-2">
+        <div className="space-y-1">
           {/* Base Price */}
           {product.base_price !== null && (
             <div className="flex items-center justify-between text-sm">
@@ -85,13 +85,13 @@ export const ProductItem = ({ product }: ProductItemProps) => {
           )}
 
           {/* Additional Prices */}
-          {activePrices.slice(0, 2).map((priceItem) => (
+          {activePrices.map((priceItem) => (
             <div
               key={priceItem.id}
               className="flex items-center justify-between text-sm"
             >
               <span className="text-muted-foreground">{priceItem.label}:</span>
-              <span className="font-semibold text-emerald-600">
+              <span className="text-muted-foreground ">
                 {priceItem.price.toFixed(2)} {product.currency || "Bs"}{" "}
               </span>
             </div>
