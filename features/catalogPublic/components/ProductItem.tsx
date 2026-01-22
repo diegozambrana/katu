@@ -1,45 +1,32 @@
 "use client";
 
 import { Card, CardContent } from "@/components/ui/card";
-// import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-// import { ShoppingCart } from "lucide-react";
+import { Eye } from "lucide-react";
+import { useCatalogPublicStore } from "../stores/CatalogPublicStore";
+import type { Product } from "@/types/Products";
 
-interface ProductPrice {
-  id: string;
-  label: string;
-  price: number;
-  active: boolean;
-}
-
-interface ProductImage {
-  id: string;
-  image: string;
-  is_primary: boolean;
-}
 
 interface ProductItemProps {
-  product: {
-    id: string;
-    name: string;
-    description?: string | null;
-    base_price: number | null;
-    currency: string | null;
-    is_on_sale?: boolean | null;
-    sale_label?: string | null;
-    product_images?: ProductImage[];
-    product_prices?: ProductPrice[];
-  };
+  product: Product;
 }
 
 export const ProductItem = ({ product }: ProductItemProps) => {
+  const { setSelectedProduct, setOpenProductDetailModal } =
+    useCatalogPublicStore();
   const primaryImage = product.product_images?.find((img) => img.is_primary);
   const activePrices = product.product_prices?.filter((p) => p.active) || [];
 
+  const handleViewDetails = () => {
+    setSelectedProduct(product);
+    setOpenProductDetailModal(true);
+  };
+
   return (
-    <Card className="group overflow-hidden transition-shadow hover:shadow-lg">
+    <Card className="group overflow-hidden transition-shadow hover:shadow-lg flex flex-col h-full">
       {/* Product Image */}
-      <div className="relative aspect-square bg-muted overflow-hidden">
+      <div className="relative aspect-square bg-muted overflow-hidden flex-shrink-0">
         {primaryImage?.image ? (
           <img
             src={primaryImage.image}
@@ -61,48 +48,55 @@ export const ProductItem = ({ product }: ProductItemProps) => {
       </div>
 
       {/* Product Info */}
-      <CardContent className="p-4">
-        <h4 className="font-semibold text-base mb-1 line-clamp-2">
-          {product.name}
-        </h4>
+      <CardContent className="p-4 flex flex-col flex-1">
+        <div className="flex-1">
+          <h4 className="font-semibold text-base mb-1 line-clamp-2">
+            {product.name}
+          </h4>
 
-        {product.description && (
-          <p className="text-xs text-muted-foreground mb-3 line-clamp-2">
-            {product.description}
-          </p>
-        )}
-
-        {/* Pricing */}
-        <div className="space-y-1">
-          {/* Base Price */}
-          {product.base_price !== null && (
-            <div className="flex items-center justify-between text-sm">
-              <span className="text-muted-foreground">Precio:</span>
-              <span className="font-bold">
-                {product.base_price.toFixed(2)} {product.currency || "Bs"}{" "}
-              </span>
-            </div>
+          {product.description && (
+            <p className="text-xs text-muted-foreground mb-3 line-clamp-2">
+              {product.description}
+            </p>
           )}
 
-          {/* Additional Prices */}
-          {activePrices.map((priceItem) => (
-            <div
-              key={priceItem.id}
-              className="flex items-center justify-between text-sm"
-            >
-              <span className="text-muted-foreground">{priceItem.label}:</span>
-              <span className="text-muted-foreground ">
-                {priceItem.price.toFixed(2)} {product.currency || "Bs"}{" "}
-              </span>
-            </div>
-          ))}
+          {/* Pricing */}
+          <div className="space-y-1">
+            {/* Base Price */}
+            {product.base_price !== null && (
+              <div className="flex items-center justify-between text-sm">
+                <span className="text-muted-foreground">Precio:</span>
+                <span className="font-bold">
+                  {product.base_price.toFixed(2)} {product.currency || "Bs"}{" "}
+                </span>
+              </div>
+            )}
+
+            {/* Additional Prices */}
+            {activePrices.map((priceItem) => (
+              <div
+                key={priceItem.id}
+                className="flex items-center justify-between text-sm"
+              >
+                <span className="text-muted-foreground">{priceItem.label}:</span>
+                <span className="text-muted-foreground ">
+                  {priceItem.price.toFixed(2)} {product.currency || "Bs"}{" "}
+                </span>
+              </div>
+            ))}
+          </div>
         </div>
 
-        {/* Add to Cart Button */}
-        {/* <Button className="w-full mt-4" size="sm">
-          <ShoppingCart className="mr-2 h-4 w-4" />
-          Add to Cart
-        </Button> */}
+        <div className="mt-auto pt-4">
+          <Button
+            className="w-full"
+            size="sm"
+            onClick={handleViewDetails}
+          >
+            <Eye className="mr-2 h-4 w-4" />
+            Ver detalles
+          </Button>
+        </div>
       </CardContent>
     </Card>
   );

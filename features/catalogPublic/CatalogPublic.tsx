@@ -1,9 +1,16 @@
 "use client";
 
+import {
+  CatalogSlider,
+  CatalogSection,
+  BusinessHeader,
+  ProductDetailModal,
+} from "./components";
+import { Separator } from "@/components/ui/separator";
+import { useCatalogPublic } from "./hooks/useCatalogPublic";
+import { useCatalogPublicStore } from "./stores/CatalogPublicStore";
 import type { Catalog } from "@/types/Catalog";
 import type { Product } from "@/types/Products";
-import { CatalogSlider, CatalogSection, BusinessHeader } from "./components";
-import { Separator } from "@/components/ui/separator";
 
 interface CatalogPublicProps {
   catalog: Catalog & {
@@ -46,30 +53,23 @@ interface CatalogPublicProps {
 }
 
 export const CatalogPublic = ({ catalog }: CatalogPublicProps) => {
-  // Filter and sort data
-  const activeSlides =
-    catalog.catalog_slides
-      ?.filter((s) => s.active)
-      .sort((a, b) => a.sort_order - b.sort_order) || [];
+  const {
+    activeSlides,
+    activeSections,
+    activeContacts,
+    navSections,
+    domain,
+  } = useCatalogPublic(catalog);
 
-  const activeSections =
-    catalog.catalog_sections
-      ?.filter((s) => s.active)
-      .sort((a, b) => a.sort_order - b.sort_order) || [];
-  
-
-  const activeContacts =
-    catalog.catalog_contacts?.filter((c) => c.active) || [];
-
-  const domain = process.env.NEXT_PUBLIC_PUBLIC_DOMAIN || "catalogo.cc";
+  const { selectedProduct, openProductDetailModal, setOpenProductDetailModal } =
+    useCatalogPublicStore();
 
   return (
     <div className="min-h-screen bg-background">
       {/* Business Header */}
-      {catalog.business && <BusinessHeader business={catalog.business} sections={catalog.catalog_sections?.map((section) => ({
-        id: section.id,
-        title: section.title,
-      }))} />}
+      {catalog.business && (
+        <BusinessHeader business={catalog.business} sections={navSections} />
+      )}
 
       <main className="container mx-auto px-4 py-8 md:py-12">
         {/* Catalog Header */}
@@ -126,6 +126,13 @@ export const CatalogPublic = ({ catalog }: CatalogPublicProps) => {
           <p className="mt-1">Powered by <a className="font-bold hover:underline" href={domain} target="_blank" rel="noreferrer">Catalogo</a></p>
         </footer>
       </main>
+
+      {/* Product Detail Modal */}
+      <ProductDetailModal
+        product={selectedProduct}
+        open={openProductDetailModal}
+        onOpenChange={setOpenProductDetailModal}
+      />
     </div>
   );
 };
