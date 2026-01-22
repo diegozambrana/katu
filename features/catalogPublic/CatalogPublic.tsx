@@ -11,6 +11,7 @@ import { useCatalogPublic } from "./hooks/useCatalogPublic";
 import { useCatalogPublicStore } from "./stores/CatalogPublicStore";
 import type { Catalog } from "@/types/Catalog";
 import type { Product } from "@/types/Products";
+import { CatalogContactItem } from "./components/CatalogContactItem";
 
 interface CatalogPublicProps {
   catalog: Catalog & {
@@ -99,18 +100,13 @@ export const CatalogPublic = ({ catalog }: CatalogPublicProps) => {
           <>
             <Separator className="my-12" />
             <div className="text-center">
-              <h3 className="text-xl md:text-2xl font-bold mb-6">Contactanos</h3>
+              <h3 className="text-xl md:text-2xl font-bold mb-6">Contactos</h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 max-w-3xl mx-auto">
                 {activeContacts.map((contact) => (
-                  <div
+                  <CatalogContactItem
                     key={contact.id}
-                    className="p-4 rounded-lg border bg-card"
-                  >
-                    <p className="text-sm text-muted-foreground mb-1">
-                      {contact.label}
-                    </p>
-                    <p className="font-medium break-all">{contact.value}</p>
-                  </div>
+                    contact={contact}
+                  />
                 ))}
               </div>
             </div>

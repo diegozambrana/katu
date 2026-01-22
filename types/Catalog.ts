@@ -69,3 +69,12 @@ export type CatalogContact = {
   value: string;
   catalog_id: string;
 };
+
+export enum CatalogContactType {
+  PHONE = "phone",
+  EMAIL = "email",
+  WHATSAPP = "whatsapp",
+  WEBSITE = "website",
+  ADDRESS = "address",
+  OTHER = "other",
+}
