@@ -5,7 +5,7 @@ import { MainContainer } from "@/components/layout/container";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Edit, Eye } from "lucide-react";
+import { Edit } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 interface ProductDetailProps {
@@ -51,12 +51,6 @@ export const ProductDetail = ({ productId }: ProductDetailProps) => {
       .sort((a, b) => a.sort_order - b.sort_order)
     : [];
 
-  const publicUrl = `catalogo.app/p/${product.slug}`;
-
-  const handleCopyUrl = async () => {
-    await navigator.clipboard.writeText(publicUrl);
-  };
-
   return (
     <MainContainer
       title="Detalles del Producto"
@@ -69,10 +63,7 @@ export const ProductDetail = ({ productId }: ProductDetailProps) => {
             <Edit className="mr-2 h-4 w-4" />
             Editar Producto
           </Button>
-          <Button variant="outline">
-            <Eye className="mr-2 h-4 w-4" />
-            Vista Previa
-          </Button>
+
         </div>
       }
       loading={loading}

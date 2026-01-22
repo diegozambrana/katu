@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
   Edit,
-  Eye,
   Phone,
   Mail,
   Globe,
@@ -89,10 +88,6 @@ export const BusinessDetail = ({ businessId }: BusinessDetailProps) => {
           >
             <Edit className="mr-2 h-4 w-4" />
             Edit Profile
-          </Button>
-          <Button variant="outline">
-            <Eye className="mr-2 h-4 w-4" />
-            Preview Public Page
           </Button>
         </div>
       }
