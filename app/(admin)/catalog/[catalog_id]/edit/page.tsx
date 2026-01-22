@@ -1,5 +1,6 @@
-import { CatalogEdit } from "@/features/catalog/edit";
+import { CatalogCreate } from "@/features/catalog/create";
 import { getProducts } from "@/actions/product/ProductActions";
+import { getBusinesses } from "@/actions/business/BusinessActions";
 
 interface CatalogEditPageProps {
   params: Promise<{ catalog_id: string }>;
@@ -10,6 +11,12 @@ export default async function CatalogEditPage({
 }: CatalogEditPageProps) {
   const { catalog_id } = await params;
   const products = await getProducts();
+  const businesses = await getBusinesses();
+
+  const businessOptions = (businesses || []).map((business) => ({
+    id: business.id,
+    name: business.name,
+  }));
 
   const productOptions = (products || []).map((product) => ({
     id: product.id,
@@ -18,5 +25,11 @@ export default async function CatalogEditPage({
     currency: product.currency,
   }));
 
-  return <CatalogEdit catalogId={catalog_id} products={productOptions} />;
+  return (
+    <CatalogCreate
+      businesses={businessOptions}
+      products={productOptions}
+      catalogId={catalog_id}
+    />
+  );
 }

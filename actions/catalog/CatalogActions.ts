@@ -43,6 +43,9 @@ export async function createCatalog(formData: FormData) {
   const description = formData.get("description") as string | null;
   const active = formData.get("active") === "true";
   const business_id = formData.get("business_id") as string;
+  const catalog_whatsapp_fab_display = formData.get("catalog_whatsapp_fab_display") === "true";
+  const catalog_whatsapp_number = formData.get("catalog_whatsapp_number") as string | null;
+  const catalog_whatsapp_text = formData.get("catalog_whatsapp_text") as string | null;
 
   const catalogData: Partial<
     Omit<
@@ -60,6 +63,9 @@ export async function createCatalog(formData: FormData) {
     user_id: user.id,
     business_id,
     active,
+    catalog_whatsapp_fab_display,
+    catalog_whatsapp_number: catalog_whatsapp_number || null,
+    catalog_whatsapp_text: catalog_whatsapp_text || null,
   };
 
   if (description) catalogData.description = description;
@@ -236,6 +242,9 @@ export async function updateCatalog(formData: FormData) {
   const slug = formData.get("slug") as string;
   const description = formData.get("description") as string | null;
   const active = formData.get("active") === "true";
+  const catalog_whatsapp_fab_display = formData.get("catalog_whatsapp_fab_display") === "true";
+  const catalog_whatsapp_number = formData.get("catalog_whatsapp_number") as string | null;
+  const catalog_whatsapp_text = formData.get("catalog_whatsapp_text") as string | null;
 
   // Verificar que el catálogo pertenece al usuario
   const catalogService = new CatalogServices(supabase);
@@ -263,6 +272,9 @@ export async function updateCatalog(formData: FormData) {
     slug,
     active,
     updated_at: new Date().toISOString(),
+    catalog_whatsapp_fab_display,
+    catalog_whatsapp_number: catalog_whatsapp_number || null,
+    catalog_whatsapp_text: catalog_whatsapp_text || null,
   };
 
   if (description !== null) catalogData.description = description;

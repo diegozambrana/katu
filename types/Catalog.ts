@@ -11,6 +11,9 @@ export type Catalog = {
   catalog_slides?: CatalogSlide[];
   catalog_sections?: CatalogSection[];
   catalog_contacts?: CatalogContact[];
+  catalog_whatsapp_fab_display: boolean;
+  catalog_whatsapp_number: string | null;
+  catalog_whatsapp_text: string | null;
 };
 
 export type CatalogSlide = {

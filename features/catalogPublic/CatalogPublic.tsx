@@ -12,6 +12,8 @@ import { useCatalogPublicStore } from "./stores/CatalogPublicStore";
 import type { Catalog } from "@/types/Catalog";
 import type { Product } from "@/types/Products";
 import { CatalogContactItem } from "./components/CatalogContactItem";
+import { WhatsAppIcon } from "@/components/icons/CustomIcons";
+import { FAB as FloatingActionButton } from "@/components/FAB";
 
 interface CatalogPublicProps {
   catalog: Catalog & {
@@ -129,6 +131,33 @@ export const CatalogPublic = ({ catalog }: CatalogPublicProps) => {
         open={openProductDetailModal}
         onOpenChange={setOpenProductDetailModal}
       />
+
+      {/* WhatsApp FAB */}
+      {catalog.catalog_whatsapp_fab_display &&
+        catalog.catalog_whatsapp_number && (
+          <FloatingActionButton
+            icon={<WhatsAppIcon className="h-6 w-6" />}
+            onClick={() => {
+              // Limpiar el número: solo mantener dígitos
+              const cleanNumber = catalog.catalog_whatsapp_number?.replaceAll(/\D/g, "") || "";
+              if (!cleanNumber) return;
+
+              // Construir la URL de WhatsApp
+              let whatsappUrl = `https://wa.me/${cleanNumber}`;
+
+              // Agregar mensaje si existe
+              if (catalog.catalog_whatsapp_text) {
+                const encodedMessage = encodeURIComponent(
+                  catalog.catalog_whatsapp_text
+                );
+                whatsappUrl += `?text=${encodedMessage}`;
+              }
+
+              window.open(whatsappUrl, "_blank", "noopener,noreferrer");
+            }}
+          />
+        )}
+
     </div>
   );
 };

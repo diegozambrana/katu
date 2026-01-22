@@ -36,9 +36,10 @@ interface CatalogCreateProps {
     base_price: number | null;
     currency: string | null;
   }>;
+  catalogId?: string;
 }
 
-export const CatalogCreate = ({ businesses, products }: CatalogCreateProps) => {
+export const CatalogCreate = ({ businesses, products, catalogId }: CatalogCreateProps) => {
   const {
     form,
     slides,
@@ -53,14 +54,19 @@ export const CatalogCreate = ({ businesses, products }: CatalogCreateProps) => {
     handleContactsChange,
     handleCancel,
     onSubmit,
-  } = useCatalogCreate();
+    isEditMode,
+  } = useCatalogCreate(catalogId);
+
+  const title = isEditMode ? "Editar Catálogo" : "Crear Catálogo";
+  const description = isEditMode
+    ? "Actualiza tu catálogo, secciones y productos"
+    : "Crea y organiza tus secciones de catálogo, productos y slides";
+  const submitButtonText = isEditMode ? "Guardar Cambios" : "Guardar Catálogo";
 
   return (
-    <MainContainer title="Crear Catálogo">
+    <MainContainer title={title}>
       <div className="mb-6">
-        <p className="text-sm text-muted-foreground">
-          Crea y organiza tus secciones de catálogo, productos y slides
-        </p>
+        <p className="text-sm text-muted-foreground">{description}</p>
       </div>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
@@ -77,35 +83,37 @@ export const CatalogCreate = ({ businesses, products }: CatalogCreateProps) => {
               <CardTitle>Información del Catálogo</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <FormField
-                control={form.control}
-                name="business_id"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>
-                      Negocio <span className="text-destructive">*</span>
-                    </FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Selecciona un negocio" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {businesses.map((business) => (
-                          <SelectItem key={business.id} value={business.id}>
-                            {business.name}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              {!isEditMode && (
+                <FormField
+                  control={form.control}
+                  name="business_id"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>
+                        Negocio <span className="text-destructive">*</span>
+                      </FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Selecciona un negocio" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {businesses.map((business) => (
+                            <SelectItem key={business.id} value={business.id}>
+                              {business.name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              )}
 
               <FormField
                 control={form.control}
@@ -222,6 +230,85 @@ export const CatalogCreate = ({ businesses, products }: CatalogCreateProps) => {
             </CardContent>
           </Card>
 
+          {/* WhatsApp FAB */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Botón Flotante de WhatsApp</CardTitle>
+              <p className="text-sm text-muted-foreground">
+                Configura un botón flotante de WhatsApp para que los clientes te contacten fácilmente
+              </p>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <FormField
+                control={form.control}
+                name="catalog_whatsapp_fab_display"
+                render={({ field }) => (
+                  <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+                    <div className="space-y-0.5">
+                      <FormLabel className="text-base">Mostrar Botón de WhatsApp</FormLabel>
+                      <FormDescription>
+                        Activa el botón flotante de WhatsApp en la vista pública del catálogo
+                      </FormDescription>
+                    </div>
+                    <FormControl>
+                      <Switch
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+
+              {form.watch("catalog_whatsapp_fab_display") && (
+                <>
+                  <FormField
+                    control={form.control}
+                    name="catalog_whatsapp_number"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>
+                          Número de WhatsApp <span className="text-destructive">*</span>
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder="Ej: 59171234567 (sin + ni espacios)"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormDescription>
+                          Número de teléfono con código de país (solo dígitos)
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="catalog_whatsapp_text"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Mensaje Personalizado</FormLabel>
+                        <FormControl>
+                          <Textarea
+                            placeholder="Ej: Hola, estoy interesado en tus productos..."
+                            {...field}
+                            rows={3}
+                          />
+                        </FormControl>
+                        <FormDescription>
+                          Mensaje que se enviará automáticamente al abrir WhatsApp (opcional)
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </>
+              )}
+            </CardContent>
+          </Card>
+
           {/* Status */}
           <Card>
             <CardHeader>
@@ -263,7 +350,7 @@ export const CatalogCreate = ({ businesses, products }: CatalogCreateProps) => {
               Cancelar
             </Button>
             <Button type="submit" disabled={isPending}>
-              {isPending ? "Guardando..." : "Guardar Catálogo"}
+              {isPending ? "Guardando..." : submitButtonText}
             </Button>
           </div>
         </form>

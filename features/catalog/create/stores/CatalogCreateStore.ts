@@ -11,6 +11,9 @@ export interface CatalogCreateFormData {
   description: string;
   active: boolean;
   business_id: string;
+  catalog_whatsapp_fab_display: boolean;
+  catalog_whatsapp_number: string;
+  catalog_whatsapp_text: string;
 }
 
 interface CatalogCreateState {
@@ -35,6 +38,9 @@ const defaultFormData: CatalogCreateFormData = {
   description: "",
   active: true,
   business_id: "",
+  catalog_whatsapp_fab_display: false,
+  catalog_whatsapp_number: "",
+  catalog_whatsapp_text: "",
 };
 
 export const useCatalogCreateStore = create<CatalogCreateState>((set) => ({
