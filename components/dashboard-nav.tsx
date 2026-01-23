@@ -14,7 +14,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "./ui/tooltip";
-import { LogOut, User } from "lucide-react";
+import { LogOut, MessageCircle, User } from "lucide-react";
 import { useSession } from "@/hooks/useSession";
 import { useRouter } from "next/navigation";
 import { useUserProfileStore } from "@/stores/UserProfileStore";
@@ -91,13 +91,27 @@ export function DashboardNav({
           );
         })}
         <div className="absolute bottom-4">
-          <div
-            className={
-              "flex items-center gap-2 overflow-hidden rounded-md py-2 text-sm font-medium"
-            }
-            onClick={() => { }}
+          <button
+            type="button"
+            className="flex items-center gap-2 overflow-hidden rounded-md py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground w-full text-left"
+            onClick={() => {
+              if (setOpen) setOpen(false);
+              router.push("/support/contact-us");
+            }}
           >
-            <User className={`ml-3 size-5 flex-none`} />
+            <MessageCircle className="ml-3 size-5 flex-none" />
+            {isMobileNav || (!isMinimized && !isMobileNav) ? (
+              <span className="mr-2 truncate">contact</span>
+            ) : (
+              ""
+            )}
+          </button>
+          <div
+            className="flex items-center gap-2 overflow-hidden rounded-md py-2 text-sm font-medium"
+            role="status"
+            aria-label="Usuario actual"
+          >
+            <User className="ml-3 size-5 flex-none" />
 
             {isMobileNav || (!isMinimized && !isMobileNav) ? (
               <span className="mr-2 truncate">
@@ -107,9 +121,10 @@ export function DashboardNav({
               ""
             )}
           </div>
-          <div
+          <button
+            type="button"
             className={cn(
-              "cursor-pointer flex items-center gap-2 overflow-hidden rounded-md py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground"
+              "cursor-pointer flex items-center gap-2 overflow-hidden rounded-md py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground w-full text-left"
             )}
             onClick={() => {
               if (setOpen) setOpen(false);
@@ -117,14 +132,14 @@ export function DashboardNav({
               router.push("/");
             }}
           >
-            <LogOut className={`ml-3 size-5 flex-none`} />
+            <LogOut className="ml-3 size-5 flex-none" />
 
             {isMobileNav || (!isMinimized && !isMobileNav) ? (
-              <span className="mr-2 truncate">{"Sign Out"}</span>
+              <span className="mr-2 truncate">Sign Out</span>
             ) : (
               ""
             )}
-          </div>
+          </button>
         </div>
       </TooltipProvider>
     </nav>
