@@ -55,7 +55,6 @@ Para desarrollar con Supabase localmente, sigue estos pasos:
    ```
 
    Este comando:
-
    - Descarga e inicia los servicios de Supabase (PostgreSQL, API, Auth, Storage, etc.)
    - Aplica todas las migraciones en `supabase/migrations/`
    - Muestra las URLs y credenciales de tu instancia local
@@ -84,7 +83,6 @@ Para desarrollar con Supabase localmente, sigue estos pasos:
 5. **Accede a Supabase Studio local**:
 
    Abre tu navegador en `http://127.0.0.1:54323` para acceder a la interfaz de Supabase Studio local, donde puedes:
-
    - Ver y editar datos de las tablas
    - Ejecutar consultas SQL
    - Gestionar autenticación
@@ -104,3 +102,10 @@ Para desarrollar con Supabase localmente, sigue estos pasos:
 - `supabase db pull` - Generar migraciones desde la base de datos remota
 - `supabase migration new <nombre>` - Crear una nueva migración
 - `supabase db diff --use-migra -f <nombre>` - Crea una nueva migración con `use-migra`
+
+### Copiar datos de la base de datos remoto en local
+
+```
+supabase db dump --data-only -f supabase/seed.sql
+supabase db reset
+```
