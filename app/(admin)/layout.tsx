@@ -3,6 +3,8 @@ import { Sidebar } from "@/components/layout/Sidebar";
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
+import { getUserProfile } from "@/actions/user/UserActions";
+import { UserProfileProvider } from "@/components/providers/UserProfileProvider";
 
 async function AuthCheck({ children }: { children: React.ReactNode }) {
   const supabase = await createClient();
@@ -15,7 +17,14 @@ async function AuthCheck({ children }: { children: React.ReactNode }) {
     redirect("/auth/login");
   }
 
-  return <>{children}</>;
+  // Cargar el perfil del usuario
+  const profile = await getUserProfile();
+
+  return (
+    <UserProfileProvider initialProfile={profile}>
+      {children}
+    </UserProfileProvider>
+  );
 }
 
 function LoadingSidebar() {

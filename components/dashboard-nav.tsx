@@ -17,6 +17,7 @@ import {
 import { LogOut, User } from "lucide-react";
 import { useSession } from "@/hooks/useSession";
 import { useRouter } from "next/navigation";
+import { useUserProfileStore } from "@/stores/UserProfileStore";
 
 interface DashboardNavProps {
   items: NavItem[];
@@ -33,15 +34,25 @@ export function DashboardNav({
   const { isMinimized } = useSidebar();
   const { signOut, session, loading } = useSession();
   const router = useRouter();
+  const { isAdmin } = useUserProfileStore();
 
   if (!items?.length) {
     return null;
   }
 
+  // Filtrar items basado en el rol
+  const filteredItems = items.filter((item) => {
+    // Si el item tiene adminOnly, solo mostrarlo si es admin
+    if (item.adminOnly && !isAdmin()) {
+      return false;
+    }
+    return true;
+  });
+
   return (
     <nav className="grid items-start gap-2">
       <TooltipProvider>
-        {items.map((item, index) => {
+        {filteredItems.map((item, index) => {
           const Icon = Icons[item.icon || "arrowRight"];
           return (
             item.href && (
@@ -84,7 +95,7 @@ export function DashboardNav({
             className={
               "flex items-center gap-2 overflow-hidden rounded-md py-2 text-sm font-medium"
             }
-            onClick={() => {}}
+            onClick={() => { }}
           >
             <User className={`ml-3 size-5 flex-none`} />
 
