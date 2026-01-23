@@ -8,6 +8,7 @@ export interface NavItem {
   icon?: keyof typeof Icons;
   label?: string;
   description?: string;
+  adminOnly?: boolean;
 }
 
 export interface NavItemWithChildren extends NavItem {
@@ -103,3 +104,6 @@ export * from "./Products";
 
 // Catalog types
 export * from "./Catalog";
+
+// Support types
+export * from "./Support";

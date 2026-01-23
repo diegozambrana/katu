@@ -19,4 +19,12 @@ export const navItems: NavItem[] = [
     icon: "media",
     label: "catalogs",
   },
+  {
+    title: "Soporte: mensajes",
+    href: "/support/messages",
+    icon: "business",
+    label: "support-messages",
+    adminOnly: true,
+  }
+
 ];
