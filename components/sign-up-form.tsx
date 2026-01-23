@@ -12,9 +12,11 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { GoogleIcon } from "@/components/icons/GoogleIcon";
 
 export function SignUpForm({
   className,
@@ -25,6 +27,7 @@ export function SignUpForm({
   const [repeatPassword, setRepeatPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [isGoogleLoading, setIsGoogleLoading] = useState(false);
   const router = useRouter();
 
   const handleSignUp = async (e: React.FormEvent) => {
@@ -44,7 +47,7 @@ export function SignUpForm({
         email,
         password,
         options: {
-          emailRedirectTo: `${window.location.origin}/protected`,
+          emailRedirectTo: `${globalThis.location.origin}/protected`,
         },
       });
       if (error) throw error;
@@ -53,6 +56,25 @@ export function SignUpForm({
       setError(error instanceof Error ? error.message : "An error occurred");
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleGoogleSignUp = async () => {
+    setIsGoogleLoading(true);
+    setError(null);
+    try {
+      const supabase = createClient();
+      const { error: oauthError } = await supabase.auth.signInWithOAuth({
+        provider: "google",
+        options: {
+          redirectTo: `${globalThis.location.origin}/auth/callback`,
+        },
+      });
+      if (oauthError) throw oauthError;
+      // La redirección se maneja automáticamente por Supabase
+    } catch (error: unknown) {
+      setError(error instanceof Error ? error.message : "An error occurred");
+      setIsGoogleLoading(false);
     }
   };
 
@@ -66,6 +88,28 @@ export function SignUpForm({
         <CardContent>
           <form onSubmit={handleSignUp}>
             <div className="flex flex-col gap-6">
+              <Button
+                type="button"
+                variant="outline"
+                className="w-full"
+                onClick={handleGoogleSignUp}
+                disabled={isGoogleLoading || isLoading}
+              >
+                <GoogleIcon className="mr-2 h-4 w-4" />
+                {isGoogleLoading ? "Signing up..." : "Continue with Google"}
+              </Button>
+
+              <div className="relative">
+                <div className="absolute inset-0 flex items-center">
+                  <Separator />
+                </div>
+                <div className="relative flex justify-center text-xs uppercase">
+                  <span className="bg-background px-2 text-muted-foreground">
+                    Or continue with email
+                  </span>
+                </div>
+              </div>
+
               <div className="grid gap-2">
                 <Label htmlFor="email">Email</Label>
                 <Input
@@ -102,7 +146,7 @@ export function SignUpForm({
                 />
               </div>
               {error && <p className="text-sm text-red-500">{error}</p>}
-              <Button type="submit" className="w-full" disabled={isLoading}>
+              <Button type="submit" className="w-full" disabled={isLoading || isGoogleLoading}>
                 {isLoading ? "Creating an account..." : "Sign up"}
               </Button>
             </div>
