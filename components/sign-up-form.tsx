@@ -17,6 +17,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { GoogleIcon } from "@/components/icons/GoogleIcon";
+import { FacebookIcon } from "@/components/icons/FacebookIcon";
 
 export function SignUpForm({
   className,
@@ -28,6 +29,7 @@ export function SignUpForm({
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
+  const [isFacebookLoading, setIsFacebookLoading] = useState(false);
   const router = useRouter();
 
   const handleSignUp = async (e: React.FormEvent) => {
@@ -78,6 +80,25 @@ export function SignUpForm({
     }
   };
 
+  const handleFacebookSignUp = async () => {
+    setIsFacebookLoading(true);
+    setError(null);
+    try {
+      const supabase = createClient();
+      const { error: oauthError } = await supabase.auth.signInWithOAuth({
+        provider: "facebook",
+        options: {
+          redirectTo: `${globalThis.location.origin}/auth/callback`,
+        },
+      });
+      if (oauthError) throw oauthError;
+      // La redirección se maneja automáticamente por Supabase
+    } catch (error: unknown) {
+      setError(error instanceof Error ? error.message : "An error occurred");
+      setIsFacebookLoading(false);
+    }
+  };
+
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card>
@@ -93,10 +114,21 @@ export function SignUpForm({
                 variant="outline"
                 className="w-full"
                 onClick={handleGoogleSignUp}
-                disabled={isGoogleLoading || isLoading}
+                disabled={isGoogleLoading || isLoading || isFacebookLoading}
               >
                 <GoogleIcon className="mr-2 h-4 w-4" />
                 {isGoogleLoading ? "Signing up..." : "Continue with Google"}
+              </Button>
+
+              <Button
+                type="button"
+                variant="outline"
+                className="w-full"
+                onClick={handleFacebookSignUp}
+                disabled={isFacebookLoading || isLoading || isGoogleLoading}
+              >
+                <FacebookIcon className="mr-2 h-4 w-4" />
+                {isFacebookLoading ? "Signing up..." : "Continue with Facebook"}
               </Button>
 
               <div className="relative">
@@ -146,7 +178,7 @@ export function SignUpForm({
                 />
               </div>
               {error && <p className="text-sm text-red-500">{error}</p>}
-              <Button type="submit" className="w-full" disabled={isLoading || isGoogleLoading}>
+              <Button type="submit" className="w-full" disabled={isLoading || isGoogleLoading || isFacebookLoading}>
                 {isLoading ? "Creating an account..." : "Sign up"}
               </Button>
             </div>
