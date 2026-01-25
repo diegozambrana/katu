@@ -4,15 +4,6 @@ import { FooterPublic } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header/Header";
 
 export default function Home() {
-  console.log(
-    "SUPABASE_URL:",
-    process.env.NEXT_PUBLIC_SUPABASE_URL ? "SET" : "MISSING"
-  );
-  console.log(
-    "SUPABASE_KEY:",
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ? "SET" : "MISSING"
-  );
-
   return (
     <main className="min-h-screen flex flex-col items-center">
       <div className="flex-1 w-full flex flex-col gap-20 items-center">
