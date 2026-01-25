@@ -23,8 +23,8 @@ export const Modal = ({
 }: ModalProps) => {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent>
-        <DialogHeader>
+      <DialogContent className="max-h-[90vh] flex flex-col p-0 sm:p-6">
+        <DialogHeader className="px-6 pt-6 pb-4 sm:px-0 sm:pt-0">
           <DialogTitle>{title}</DialogTitle>
           {description && (
             <DialogDescription>
@@ -32,7 +32,9 @@ export const Modal = ({
             </DialogDescription>
           )}
         </DialogHeader>
-        {children}
+        <div className="flex-1 min-h-0 overflow-y-auto px-6 pb-6 sm:px-0">
+          {children}
+        </div>
       </DialogContent>
     </Dialog>
   )

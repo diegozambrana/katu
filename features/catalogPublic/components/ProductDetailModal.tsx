@@ -36,7 +36,7 @@ export const ProductDetailModal = ({
       title={product.name}
     // description={product.description || undefined}
     >
-      <div className="space-y-6">
+      <div className="space-y-4 sm:space-y-6">
         {/* Product Images */}
         {images.length > 0 ? (
           <div className="w-full">
@@ -51,14 +51,14 @@ export const ProductDetailModal = ({
                 <CarouselContent>
                   {images.map((image) => (
                     <CarouselItem key={image.id}>
-                      <div className="relative w-full h-[500px] rounded-lg overflow-hidden bg-muted flex items-center justify-center">
+                      <div className="relative w-full h-[250px] sm:h-[350px] md:h-[450px] rounded-lg overflow-hidden bg-muted flex items-center justify-center">
                         <img
                           src={image.image}
                           alt={image.image_caption || product.name}
                           className="max-w-full max-h-full w-auto h-auto object-contain"
                         />
                         {image.image_caption && (
-                          <div className="absolute bottom-0 left-0 right-0 bg-black/60 text-white p-2 text-sm">
+                          <div className="absolute bottom-0 left-0 right-0 bg-black/60 text-white p-2 text-xs sm:text-sm">
                             {image.image_caption}
                           </div>
                         )}
@@ -70,14 +70,14 @@ export const ProductDetailModal = ({
                 <CarouselNext />
               </Carousel>
             ) : (
-              <div className="relative w-full h-[500px] rounded-lg overflow-hidden bg-muted flex items-center justify-center">
+              <div className="relative w-full h-[250px] sm:h-[350px] md:h-[450px] rounded-lg overflow-hidden bg-muted flex items-center justify-center">
                 <img
                   src={images[0].image}
                   alt={images[0].image_caption || product.name}
                   className="max-w-full max-h-full w-auto h-auto object-contain"
                 />
                 {images[0].image_caption && (
-                  <div className="absolute bottom-0 left-0 right-0 bg-black/60 text-white p-2 text-sm">
+                  <div className="absolute bottom-0 left-0 right-0 bg-black/60 text-white p-2 text-xs sm:text-sm">
                     {images[0].image_caption}
                   </div>
                 )}
@@ -85,7 +85,7 @@ export const ProductDetailModal = ({
             )}
           </div>
         ) : (
-          <div className="relative w-full h-[500px] rounded-lg overflow-hidden bg-muted flex items-center justify-center">
+          <div className="relative w-full h-[250px] sm:h-[350px] md:h-[450px] rounded-lg overflow-hidden bg-muted flex items-center justify-center">
             <span className="text-muted-foreground">Sin imagen</span>
           </div>
         )}
