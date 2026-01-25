@@ -115,7 +115,7 @@ export function DashboardNav({
 
             {isMobileNav || (!isMinimized && !isMobileNav) ? (
               <span className="mr-2 truncate">
-                {loading ? "Cargando..." : session?.user?.email || "Usuario"}
+                {loading ? "Cargando..." : session?.user?.email?.split("@")[0] || "Usuario"}
               </span>
             ) : (
               ""

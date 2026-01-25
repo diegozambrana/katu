@@ -31,7 +31,7 @@ function LoadingSidebar() {
   return (
     <aside className="relative hidden h-screen flex-none border-r bg-card transition-[width] duration-500 md:block z-50 w-72">
       <div className="hidden p-5 pt-10 lg:block">
-        <h1>Katu</h1>
+        <h1>Catalogo</h1>
       </div>
       <div className="space-y-4 py-4">
         <div className="px-3 py-2">

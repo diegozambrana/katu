@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 import { ChevronLeft } from "lucide-react";
 import { useSidebar } from "@/hooks/useSidebar";
 import Link from "next/link";
+import Image from "next/image";
 
 type SidebarProps = {
   className?: string;
@@ -27,8 +28,21 @@ export function Sidebar({ className }: SidebarProps) {
       )}
     >
       <div className="hidden p-5 pt-10 lg:block">
-        <Link href={"/apps"}>
-          <h1>{isMinimized ? "K" : "Katu"}</h1>
+        <Link
+          href={"/dashboard"}
+          className={cn(
+            "flex items-center gap-2",
+            isMinimized && "justify-center"
+          )}
+        >
+          <Image
+            src="/logo.png"
+            alt="Logo"
+            width={32}
+            height={32}
+            className="flex-shrink-0"
+          />
+          {!isMinimized && <h1 className="text-2xl font-bold">Catalogo</h1>}
         </Link>
       </div>
       <ChevronLeft
