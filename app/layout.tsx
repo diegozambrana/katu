@@ -3,6 +3,7 @@ import { Geist } from "next/font/google";
 import { ThemeProvider } from "next-themes";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
+import { AdminLayoutHandler } from "@/components/layout/AdminLayoutHandler";
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
@@ -10,7 +11,7 @@ const defaultUrl = process.env.VERCEL_URL
 
 export const metadata: Metadata = {
   metadataBase: new URL(defaultUrl),
-  title: "Katu: Generador de Catálogo de Productos",
+  title: "Catalogo",
   description: "Genera catálogos de productos de forma rápida y sencilla.",
 };
 
@@ -26,14 +27,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning className="h-full overflow-hidden">
-      <body className={`${geistSans.className} antialiased h-full overflow-hidden`}>
+    <html lang="en" suppressHydrationWarning className="h-full">
+      <body className={`${geistSans.className} antialiased h-full`}>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
           enableSystem
           disableTransitionOnChange
         >
+          <AdminLayoutHandler />
           {children}
           <Toaster />
         </ThemeProvider>
