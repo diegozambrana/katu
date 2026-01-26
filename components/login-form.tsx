@@ -46,7 +46,7 @@ export function LoginForm({
       // Update this route to redirect to an authenticated route. The user already has an active session.
       router.push("/dashboard");
     } catch (error: unknown) {
-      setError(error instanceof Error ? error.message : "An error occurred");
+      setError(error instanceof Error ? error.message : "Ocurrió un error");
     } finally {
       setIsLoading(false);
     }
@@ -66,7 +66,7 @@ export function LoginForm({
       if (oauthError) throw oauthError;
       // La redirección se maneja automáticamente por Supabase
     } catch (error: unknown) {
-      setError(error instanceof Error ? error.message : "An error occurred");
+      setError(error instanceof Error ? error.message : "Ocurrió un error");
       setIsGoogleLoading(false);
     }
   };
@@ -85,7 +85,7 @@ export function LoginForm({
       if (oauthError) throw oauthError;
       // La redirección se maneja automáticamente por Supabase
     } catch (error: unknown) {
-      setError(error instanceof Error ? error.message : "An error occurred");
+      setError(error instanceof Error ? error.message : "Ocurrió un error");
       setIsFacebookLoading(false);
     }
   };
@@ -94,49 +94,16 @@ export function LoginForm({
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card>
         <CardHeader>
-          <CardTitle className="text-2xl">Login</CardTitle>
+          <CardTitle className="text-2xl">Iniciar sesión</CardTitle>
           <CardDescription>
-            Enter your email below to login to your account
+            Ingresa tu correo electrónico para iniciar sesión
           </CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleLogin}>
             <div className="flex flex-col gap-6">
-              <Button
-                type="button"
-                variant="outline"
-                className="w-full"
-                onClick={handleGoogleLogin}
-                disabled={isGoogleLoading || isLoading || isFacebookLoading}
-              >
-                <GoogleIcon className="mr-2 h-4 w-4" />
-                {isGoogleLoading ? "Signing in..." : "Continue with Google"}
-              </Button>
-
-              <Button
-                type="button"
-                variant="outline"
-                className="w-full hidden"
-                onClick={handleFacebookLogin}
-                disabled={isFacebookLoading || isLoading || isGoogleLoading}
-              >
-                <FacebookIcon className="mr-2 h-4 w-4" />
-                {isFacebookLoading ? "Signing in..." : "Continue with Facebook"}
-              </Button>
-
-              <div className="relative">
-                <div className="absolute inset-0 flex items-center">
-                  <Separator />
-                </div>
-                <div className="relative flex justify-center text-xs uppercase">
-                  <span className="bg-background px-2 text-muted-foreground">
-                    Or continue with email
-                  </span>
-                </div>
-              </div>
-
               <div className="grid gap-2">
-                <Label htmlFor="email">Email</Label>
+                <Label htmlFor="email">Correo electrónico</Label>
                 <Input
                   id="email"
                   type="email"
@@ -148,12 +115,12 @@ export function LoginForm({
               </div>
               <div className="grid gap-2">
                 <div className="flex items-center">
-                  <Label htmlFor="password">Password</Label>
+                  <Label htmlFor="password">Contraseña</Label>
                   <Link
                     href="/auth/forgot-password"
                     className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
                   >
-                    Forgot your password?
+                    ¿Olvidaste tu contraseña?
                   </Link>
                 </div>
                 <Input
@@ -166,16 +133,49 @@ export function LoginForm({
               </div>
               {error && <p className="text-sm text-red-500">{error}</p>}
               <Button type="submit" className="w-full" disabled={isLoading || isGoogleLoading || isFacebookLoading}>
-                {isLoading ? "Logging in..." : "Login"}
+                {isLoading ? "Iniciando sesión..." : "Iniciar sesión"}
+              </Button>
+
+              <div className="relative">
+                <div className="absolute inset-0 flex items-center">
+                  <Separator />
+                </div>
+                <div className="relative flex justify-center text-xs uppercase">
+                  <span className="bg-background px-2 text-muted-foreground">
+                    O continúa con
+                  </span>
+                </div>
+              </div>
+
+              <Button
+                type="button"
+                variant="outline"
+                className="w-full"
+                onClick={handleGoogleLogin}
+                disabled={isGoogleLoading || isLoading || isFacebookLoading}
+              >
+                <GoogleIcon className="mr-2 h-4 w-4" />
+                {isGoogleLoading ? "Iniciando sesión..." : "Continuar con Google"}
+              </Button>
+
+              <Button
+                type="button"
+                variant="outline"
+                className="w-full hidden"
+                onClick={handleFacebookLogin}
+                disabled={isFacebookLoading || isLoading || isGoogleLoading}
+              >
+                <FacebookIcon className="mr-2 h-4 w-4" />
+                {isFacebookLoading ? "Iniciando sesión..." : "Continuar con Facebook"}
               </Button>
             </div>
             <div className="mt-4 text-center text-sm">
-              Don&apos;t have an account?{" "}
+              ¿No tienes una cuenta?{" "}
               <Link
                 href="/auth/sign-up"
                 className="underline underline-offset-4"
               >
-                Sign up
+                Regístrate
               </Link>
             </div>
           </form>
