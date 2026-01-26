@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist } from "next/font/google";
 import { ThemeProvider } from "next-themes";
+import { Suspense } from "react";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
 import { AdminLayoutHandler } from "@/components/layout/AdminLayoutHandler";
@@ -35,7 +36,9 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <AdminLayoutHandler />
+          <Suspense fallback={null}>
+            <AdminLayoutHandler />
+          </Suspense>
           {children}
           <Toaster />
         </ThemeProvider>
