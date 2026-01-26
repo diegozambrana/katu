@@ -116,7 +116,7 @@ export function LoginForm({
               <Button
                 type="button"
                 variant="outline"
-                className="w-full"
+                className="w-full hidden"
                 onClick={handleFacebookLogin}
                 disabled={isFacebookLoading || isLoading || isGoogleLoading}
               >

@@ -123,7 +123,7 @@ export function SignUpForm({
               <Button
                 type="button"
                 variant="outline"
-                className="w-full"
+                className="w-full hidden"
                 onClick={handleFacebookSignUp}
                 disabled={isFacebookLoading || isLoading || isGoogleLoading}
               >
