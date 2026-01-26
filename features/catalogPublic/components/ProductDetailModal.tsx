@@ -39,7 +39,7 @@ export const ProductDetailModal = ({
       <div className="space-y-4 sm:space-y-6">
         {/* Product Images */}
         {images.length > 0 ? (
-          <div className="w-full">
+          <div className="w-full overflow-hidde position-relative">
             {images.length > 1 ? (
               <Carousel
                 opts={{
@@ -48,10 +48,15 @@ export const ProductDetailModal = ({
                 }}
                 className="w-full"
               >
-                <CarouselContent>
+                {/* Flechas arriba */}
+                <div>
+                  <CarouselPrevious className=" position-absolute left-0 top-1/2 -translate-y-1/2 -translate-x-0 z-10" />
+                  <CarouselNext className=" position-absolute right-0 top-1/2 -translate-y-1/2 -translate-x-0 z-10" />
+                </div>
+                <CarouselContent className="-ml-0">
                   {images.map((image) => (
-                    <CarouselItem key={image.id}>
-                      <div className="relative w-full h-[250px] sm:h-[350px] md:h-[450px] rounded-lg overflow-hidden bg-muted flex items-center justify-center">
+                    <CarouselItem key={image.id} className="pl-0 basis-full">
+                      <div className="relative w-full h-[250px] sm:h-[350px] md:h-[400px] rounded-lg overflow-hidden bg-muted flex items-center justify-center">
                         <img
                           src={image.image}
                           alt={image.image_caption || product.name}
@@ -66,11 +71,9 @@ export const ProductDetailModal = ({
                     </CarouselItem>
                   ))}
                 </CarouselContent>
-                <CarouselPrevious />
-                <CarouselNext />
               </Carousel>
             ) : (
-              <div className="relative w-full h-[250px] sm:h-[350px] md:h-[450px] rounded-lg overflow-hidden bg-muted flex items-center justify-center">
+              <div className="relative w-full h-[250px] sm:h-[350px] md:h-[400px] rounded-lg overflow-hidden bg-muted flex items-center justify-center">
                 <img
                   src={images[0].image}
                   alt={images[0].image_caption || product.name}
@@ -85,7 +88,7 @@ export const ProductDetailModal = ({
             )}
           </div>
         ) : (
-          <div className="relative w-full h-[250px] sm:h-[350px] md:h-[450px] rounded-lg overflow-hidden bg-muted flex items-center justify-center">
+          <div className="relative w-full h-[250px] sm:h-[350px] md:h-[400px] rounded-lg overflow-hidden bg-muted flex items-center justify-center">
             <span className="text-muted-foreground">Sin imagen</span>
           </div>
         )}

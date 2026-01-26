@@ -16,7 +16,7 @@ export const ProductItem = ({ product }: ProductItemProps) => {
   const { setSelectedProduct, setOpenProductDetailModal } =
     useCatalogPublicStore();
   const primaryImage = product.product_images?.find((img) => img.is_primary);
-  const activePrices = product.product_prices?.filter((p) => p.active) || [];
+  // const activePrices = product.product_prices?.filter((p) => p.active) || [];
 
   const handleViewDetails = () => {
     setSelectedProduct(product);
@@ -73,7 +73,7 @@ export const ProductItem = ({ product }: ProductItemProps) => {
             )}
 
             {/* Additional Prices */}
-            {activePrices.map((priceItem) => (
+            {/* activePrices.map((priceItem) => (
               <div
                 key={priceItem.id}
                 className="flex items-center justify-between text-sm"
@@ -83,7 +83,7 @@ export const ProductItem = ({ product }: ProductItemProps) => {
                   {priceItem.price.toFixed(2)} {product.currency || "Bs"}{" "}
                 </span>
               </div>
-            ))}
+            )) */}
           </div>
         </div>
 
