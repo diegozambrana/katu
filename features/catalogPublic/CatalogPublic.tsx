@@ -137,6 +137,7 @@ export const CatalogPublic = ({ catalog }: CatalogPublicProps) => {
         catalog.catalog_whatsapp_number && (
           <FloatingActionButton
             icon={<WhatsAppIcon className="h-6 w-6" />}
+            className="bg-[#25D366] hover:bg-[#1ebe5a]"
             onClick={() => {
               // Limpiar el número: solo mantener dígitos
               const cleanNumber = catalog.catalog_whatsapp_number?.replaceAll(/\D/g, "") || "";
