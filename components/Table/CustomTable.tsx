@@ -118,46 +118,49 @@ export function CustomTable<TData extends object>({
       cols.push({
         id: "actions",
         enableHiding: false,
+        header: () => <div className="text-right">Acciones</div>,
         cell: ({ row }: { row: Row<TData> }) => {
           const rowData = row.original;
 
           return (
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="h-8 w-8 p-0">
-                  <span className="sr-only">Open menu</span>
-                  <MoreHorizontal className="h-4 w-4" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                {actions.includes("view") && (
-                  <DropdownMenuItem onClick={() => onAction(rowData, "view")}>
-                    <Eye className="mr-2 h-4 w-4" />
-                    View
-                  </DropdownMenuItem>
-                )}
-                {actions.includes("edit") && (
-                  <DropdownMenuItem onClick={() => onAction(rowData, "edit")}>
-                    <Edit className="mr-2 h-4 w-4" />
-                    Edit
-                  </DropdownMenuItem>
-                )}
-                {actions.includes("delete") && (
-                  <>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem
-                      onClick={() => onAction(rowData, "delete")}
-                      className="text-destructive"
-                    >
-                      <Trash2 className="mr-2 h-4 w-4" />
-                      Delete
+            <div className="flex justify-end">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" className="h-8 w-8 p-0">
+                    <span className="sr-only">Open menu</span>
+                    <MoreHorizontal className="h-4 w-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  {actions.includes("view") && (
+                    <DropdownMenuItem onClick={() => onAction(rowData, "view")}>
+                      <Eye className="mr-2 h-4 w-4" />
+                      View
                     </DropdownMenuItem>
-                  </>
-                )}
-              </DropdownMenuContent>
-            </DropdownMenu>
+                  )}
+                  {actions.includes("edit") && (
+                    <DropdownMenuItem onClick={() => onAction(rowData, "edit")}>
+                      <Edit className="mr-2 h-4 w-4" />
+                      Edit
+                    </DropdownMenuItem>
+                  )}
+                  {actions.includes("delete") && (
+                    <>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem
+                        onClick={() => onAction(rowData, "delete")}
+                        className="text-destructive"
+                      >
+                        <Trash2 className="mr-2 h-4 w-4" />
+                        Delete
+                      </DropdownMenuItem>
+                    </>
+                  )}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
           );
         },
       });
@@ -234,9 +237,9 @@ export function CustomTable<TData extends object>({
                       {header.isPlaceholder
                         ? null
                         : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
                     </TableHead>
                   );
                 })}
@@ -283,7 +286,7 @@ export function CustomTable<TData extends object>({
             to{" "}
             {Math.min(
               (table.getState().pagination.pageIndex + 1) *
-                table.getState().pagination.pageSize,
+              table.getState().pagination.pageSize,
               table.getFilteredRowModel().rows.length
             )}{" "}
             of {table.getFilteredRowModel().rows.length} entries
@@ -298,7 +301,7 @@ export function CustomTable<TData extends object>({
                 }}
                 className="h-8 w-[70px] rounded-md border border-input bg-background px-2 text-sm"
               >
-                {[10, 20, 25, 30, 40, 50].map((size) => (
+                {[10, 20, 50, 100].map((size) => (
                   <option key={size} value={size}>
                     {size}
                   </option>
