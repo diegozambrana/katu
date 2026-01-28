@@ -7,6 +7,7 @@ export interface UserProfile {
   role: UserRole;
   email?: string;
   full_name?: string;
+  onboarding_completed: boolean;
 }
 
 interface UserProfileState {

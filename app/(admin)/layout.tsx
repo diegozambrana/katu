@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { Suspense } from "react";
 import { getUserProfile } from "@/actions/user/UserActions";
 import { UserProfileProvider } from "@/components/providers/UserProfileProvider";
+import { OnboardingMessage } from "@/features/onboardingMessage/OnboardingMessage";
 
 async function AuthCheck({ children }: { children: React.ReactNode }) {
   const supabase = await createClient();
@@ -75,6 +76,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             <div className="flex-1 min-h-0 overflow-y-auto">{children}</div>
           </main>
         </div>
+        <OnboardingMessage />
       </AuthCheck>
     </Suspense>
   );

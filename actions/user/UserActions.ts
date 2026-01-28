@@ -9,6 +9,7 @@ export interface UserProfile {
   role: UserRole;
   email?: string;
   full_name?: string;
+  onboarding_completed: boolean;
 }
 
 export async function getUserProfile(): Promise<UserProfile | null> {
@@ -27,7 +28,7 @@ export async function getUserProfile(): Promise<UserProfile | null> {
   // Obtener el perfil desde la tabla profiles donde id = user.id
   const { data: profile, error: profileError } = await supabase
     .from("profiles")
-    .select("id, role, email, full_name")
+    .select("id, role, email, full_name, onboarding_completed")
     .eq("id", user.id)
     .single();
 
@@ -40,5 +41,31 @@ export async function getUserProfile(): Promise<UserProfile | null> {
     role: (profile.role as UserRole) || "USER",
     email: profile.email || user.email,
     full_name: profile.full_name || null,
+    onboarding_completed: profile.onboarding_completed || false,
   };
+}
+
+export async function completeOnboarding() {
+  await cookies();
+  const supabase = await createClient();
+
+  const {
+    data: { user },
+    error: authError,
+  } = await supabase.auth.getUser();
+
+  if (authError || !user) {
+    throw new Error("No autenticado");
+  }
+
+  const { error } = await supabase
+    .from("profiles")
+    .update({ onboarding_completed: true })
+    .eq("id", user.id);
+
+  if (error) {
+    throw error;
+  }
+
+  return { success: true };
 }
