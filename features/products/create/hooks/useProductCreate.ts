@@ -6,7 +6,11 @@ import { z } from "zod";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useTransition } from "react";
 import { useProductCreateStore } from "../stores/ProductCreateStore";
-import { createProduct, updateProduct, getProductById } from "@/actions/product/ProductActions";
+import {
+  createProduct,
+  updateProduct,
+  getProductById,
+} from "@/actions/product/ProductActions";
 import { ProductImageData, PriceTierData } from "../components";
 import type { ProductPrice, ProductImage } from "@/types/Products";
 import { toast } from "sonner";
@@ -99,7 +103,10 @@ export const useProductCreate = (productId?: string) => {
         // Convertir product_images a ProductImageData[]
         if (product.product_images && Array.isArray(product.product_images)) {
           const convertedImages: ProductImageData[] = product.product_images
-            .sort((a: ProductImage, b: ProductImage) => a.display_order - b.display_order)
+            .sort(
+              (a: ProductImage, b: ProductImage) =>
+                a.display_order - b.display_order,
+            )
             .map((img: ProductImage) => ({
               id: img.id,
               image: img.image,
@@ -115,7 +122,9 @@ export const useProductCreate = (productId?: string) => {
         // Convertir product_prices a PriceTierData[]
         if (product.product_prices && Array.isArray(product.product_prices)) {
           const convertedPrices: PriceTierData[] = product.product_prices
-            .sort((a: ProductPrice, b: ProductPrice) => a.sort_order - b.sort_order)
+            .sort(
+              (a: ProductPrice, b: ProductPrice) => a.sort_order - b.sort_order,
+            )
             .map((price: ProductPrice) => ({
               id: price.id,
               label: price.label,
@@ -129,7 +138,7 @@ export const useProductCreate = (productId?: string) => {
         }
       } catch (err) {
         setError(
-          err instanceof Error ? err.message : "Error al cargar el producto"
+          err instanceof Error ? err.message : "Error al cargar el producto",
         );
       }
     };
@@ -139,10 +148,9 @@ export const useProductCreate = (productId?: string) => {
 
   useEffect(() => {
     return () => {
-      console.log("~~~~resetting");
       reset();
-    }
-  },[])
+    };
+  }, []);
 
   // Generar slug automáticamente desde el nombre (solo en modo creación)
   useEffect(() => {
@@ -183,19 +191,21 @@ export const useProductCreate = (productId?: string) => {
     startTransition(async () => {
       try {
         const formDataToSend = new FormData();
-        
+
         if (productId) {
           formDataToSend.append("product_id", productId);
         }
-        
+
         formDataToSend.append("name", data.name);
         formDataToSend.append("slug", data.slug);
         if (data.description)
           formDataToSend.append("description", data.description);
-        if (data.base_price) formDataToSend.append("base_price", data.base_price);
+        if (data.base_price)
+          formDataToSend.append("base_price", data.base_price);
         if (data.currency) formDataToSend.append("currency", data.currency);
         formDataToSend.append("is_on_sale", data.is_on_sale.toString());
-        if (data.sale_label) formDataToSend.append("sale_label", data.sale_label);
+        if (data.sale_label)
+          formDataToSend.append("sale_label", data.sale_label);
         formDataToSend.append("active", data.active.toString());
         formDataToSend.append("business_id", data.business_id);
 
@@ -223,9 +233,17 @@ export const useProductCreate = (productId?: string) => {
         }
       } catch (err) {
         setError(
-          err instanceof Error ? err.message : (productId ? "Error al actualizar el producto" : "Error al crear el producto")
+          err instanceof Error
+            ? err.message
+            : productId
+              ? "Error al actualizar el producto"
+              : "Error al crear el producto",
         );
-        toast.error(productId ? "Error al actualizar producto" : "Error al crear producto");
+        toast.error(
+          productId
+            ? "Error al actualizar producto"
+            : "Error al crear producto",
+        );
       }
     });
   };

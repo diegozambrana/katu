@@ -41,7 +41,6 @@ export const useBusinessDetail = (businessId: string) => {
 
   useEffect(() => {
     return () => {
-      console.log("~~~~~~~~~~~~~~~~~ useEffect");
       reset();
       hasFetched.current = false;
     };
