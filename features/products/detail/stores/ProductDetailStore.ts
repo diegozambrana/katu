@@ -8,6 +8,7 @@ interface ProductDetailState {
   setProduct: (product: Product | null) => void;
   setLoading: (loading: boolean) => void;
   setError: (error: string | null) => void;
+  reset: () => void;
 }
 
 export const useProductDetailStore = create<ProductDetailState>((set) => ({
@@ -20,4 +21,6 @@ export const useProductDetailStore = create<ProductDetailState>((set) => ({
   setLoading: (loading) => set({ loading }),
 
   setError: (error) => set({ error }),
+
+  reset: () => set({ product: null, loading: false, error: null }),
 }));

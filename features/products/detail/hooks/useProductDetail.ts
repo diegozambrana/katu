@@ -28,7 +28,7 @@ export const useProductDetail = (productId: string) => {
           setProduct(data);
         } catch (err) {
           setError(
-            err instanceof Error ? err.message : "Error al cargar el producto"
+            err instanceof Error ? err.message : "Error al cargar el producto",
           );
         } finally {
           setLoading(false);
@@ -37,6 +37,7 @@ export const useProductDetail = (productId: string) => {
     };
 
     fetchProduct();
+    hasFetched.current = false;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [productId]);
 

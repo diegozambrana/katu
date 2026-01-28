@@ -30,13 +30,6 @@ export const ProductDetail = ({ productId }: ProductDetailProps) => {
     );
   }
 
-  // Datos mock para estadísticas
-  const mockData = {
-    views: 523,
-    orders: 12,
-    lastUpdated: new Date(product.updated_at).toLocaleDateString(),
-  };
-
   // Obtener imagen primaria o la primera imagen
   const primaryImage =
     product.product_images?.find((img) => img.is_primary) ||
@@ -88,13 +81,13 @@ export const ProductDetail = ({ productId }: ProductDetailProps) => {
               )}
               <div className="flex-1">
                 <h2 className="text-2xl font-bold mb-2">{product.name}</h2>
-                <p className="text-muted-foreground font-mono text-sm mb-3">
+                {/* <p className="text-muted-foreground font-mono text-sm mb-3">
                   {product.slug}
-                </p>
+                </p> */}
                 <div className="flex gap-2">
-                  <Badge variant={product.active ? "default" : "outline"}>
+                  {/* <Badge variant={product.active ? "default" : "outline"}>
                     {product.active ? "Activo" : "Inactivo"}
-                  </Badge>
+                  </Badge> */}
                   {product.is_on_sale && (
                     <Badge variant="default" className="bg-orange-500">
                       {product.sale_label || "En Oferta"}
@@ -145,10 +138,10 @@ export const ProductDetail = ({ productId }: ProductDetailProps) => {
                   <p className="text-sm text-muted-foreground mb-1">Nombre</p>
                   <p className="font-medium">{product.name}</p>
                 </div>
-                <div>
+                {/* <div>
                   <p className="text-sm text-muted-foreground mb-1">Slug URL</p>
                   <p className="font-mono text-sm">{product.slug}</p>
-                </div>
+                </div> */}
                 <div>
                   <p className="text-sm text-muted-foreground mb-1">
                     Descripción
@@ -208,20 +201,20 @@ export const ProductDetail = ({ productId }: ProductDetailProps) => {
                 <CardTitle>Estadísticas</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div>
+                {/* <div>
                   <p className="text-sm text-muted-foreground mb-1">Vistas</p>
                   <p className="text-2xl font-bold">{mockData.views}</p>
                 </div>
                 <div>
                   <p className="text-sm text-muted-foreground mb-1">Pedidos</p>
                   <p className="text-2xl font-bold">{mockData.orders}</p>
-                </div>
-                <div>
+                </div> */}
+                {/* <div>
                   <p className="text-sm text-muted-foreground mb-1">
                     Última Actualización
                   </p>
                   <p className="font-medium">{mockData.lastUpdated}</p>
-                </div>
+                </div> */}
                 <div>
                   <p className="text-sm text-muted-foreground mb-1">Estado</p>
                   <Badge variant={product.active ? "default" : "outline"}>
@@ -235,7 +228,7 @@ export const ProductDetail = ({ productId }: ProductDetailProps) => {
 
 
             {/* Quick Actions */}
-            <Card>
+            {/* <Card>
               <CardHeader>
                 <CardTitle>Acciones Rápidas</CardTitle>
               </CardHeader>
@@ -258,7 +251,7 @@ export const ProductDetail = ({ productId }: ProductDetailProps) => {
                   {product.active ? "Desactivar" : "Activar"} Producto
                 </Button>
               </CardContent>
-            </Card>
+            </Card> */}
           </div>
         </div>
       </div>

@@ -5,7 +5,7 @@ import { useCatalogDetailStore } from "../stores/CatalogDetailStore";
 import { getCatalogById } from "@/actions/catalog/CatalogActions";
 
 export const useCatalogDetail = (catalogId: string) => {
-  const { catalog, loading, error, setCatalog, setLoading, setError } =
+  const { catalog, loading, error, setCatalog, setLoading, setError, reset } =
     useCatalogDetailStore();
   const hasFetched = useRef(false);
   const currentCatalogId = useRef<string | null>(null);
@@ -28,7 +28,7 @@ export const useCatalogDetail = (catalogId: string) => {
           setCatalog(data);
         } catch (err) {
           setError(
-            err instanceof Error ? err.message : "Error al cargar el catálogo"
+            err instanceof Error ? err.message : "Error al cargar el catálogo",
           );
         } finally {
           setLoading(false);
@@ -39,6 +39,13 @@ export const useCatalogDetail = (catalogId: string) => {
     fetchCatalog();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [catalogId]);
+
+  useEffect(() => {
+    return () => {
+      reset();
+      hasFetched.current = false;
+    };
+  }, []);
 
   return {
     catalog,

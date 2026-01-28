@@ -8,6 +8,7 @@ interface CatalogDetailState {
   setCatalog: (catalog: Catalog | null) => void;
   setLoading: (loading: boolean) => void;
   setError: (error: string | null) => void;
+  reset: () => void;
 }
 
 export const useCatalogDetailStore = create<CatalogDetailState>((set) => ({
@@ -20,4 +21,6 @@ export const useCatalogDetailStore = create<CatalogDetailState>((set) => ({
   setLoading: (loading) => set({ loading }),
 
   setError: (error) => set({ error }),
+
+  reset: () => set({ catalog: null, loading: false, error: null }),
 }));

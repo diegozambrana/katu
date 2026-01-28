@@ -66,9 +66,7 @@ export const CatalogDetail = ({ catalogId }: CatalogDetailProps) => {
         <Card>
           <CardContent className="p-6">
             <h2 className="text-2xl font-bold mb-2">{catalog.name}</h2>
-            <p className="text-muted-foreground font-mono text-sm mb-3">
-              {catalog.slug}
-            </p>
+
             <Badge variant={catalog.active ? "default" : "outline"}>
               {catalog.active ? "Activo" : "Inactivo"}
             </Badge>
