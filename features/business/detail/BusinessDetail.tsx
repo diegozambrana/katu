@@ -28,7 +28,7 @@ export const BusinessDetail = ({ businessId }: BusinessDetailProps) => {
   if (!business) {
     return (
       <MainContainer
-        title="Business Profile Details"
+        title="Detalles de la Empresa"
         error={error || undefined}
         loading={loading}
       >
@@ -36,21 +36,6 @@ export const BusinessDetail = ({ businessId }: BusinessDetailProps) => {
       </MainContainer>
     );
   }
-
-  // Datos falsos para campos que no existen en el tipo
-  const mockData = {
-    profileViews: 1234,
-    productsListed: 45,
-    recentActivity: [
-      { action: "Profile updated", time: "2 hours ago", color: "bg-green-500" },
-      { action: "New product added", time: "1 day ago", color: "bg-blue-500" },
-      {
-        action: "Cover image updated",
-        time: "3 days ago",
-        color: "bg-purple-500",
-      },
-    ],
-  };
 
   // Obtener social links del business, ordenados por sort_order
   const socialLinks = business.business_social_links
@@ -117,9 +102,6 @@ export const BusinessDetail = ({ businessId }: BusinessDetailProps) => {
             </div>
             <div className="flex-1">
               <h2 className="text-2xl font-bold mb-2">{business.name}</h2>
-              <p className="text-muted-foreground font-mono text-sm">
-                {business.slug}
-              </p>
             </div>
           </CardContent>
         </Card>
@@ -131,26 +113,21 @@ export const BusinessDetail = ({ businessId }: BusinessDetailProps) => {
             {/* Business Information */}
             <Card>
               <CardHeader>
-                <CardTitle>Business Information</CardTitle>
+                <CardTitle>{"Información de la Empresa"}</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div>
                   <p className="text-sm text-muted-foreground mb-1">
-                    Business Name
+                    {"Nombre de la Empresa"}
                   </p>
                   <p className="font-medium">{business.name}</p>
                 </div>
                 <div>
-                  <p className="text-sm text-muted-foreground mb-1">URL Slug</p>
-                  <p className="font-mono text-sm">{business.slug}</p>
-                </div>
-                <div>
                   <p className="text-sm text-muted-foreground mb-1">
-                    Description
+                    {"Descripción"}
                   </p>
                   <p className="text-sm">
-                    {business.description ||
-                      "Premium artisan coffee and freshly baked goods made daily with locally sourced ingredients. We specialize in single-origin coffee beans and handcrafted pastries."}
+                    {business.description}
                   </p>
                 </div>
               </CardContent>
@@ -159,63 +136,78 @@ export const BusinessDetail = ({ businessId }: BusinessDetailProps) => {
             {/* Contact Information */}
             <Card>
               <CardHeader>
-                <CardTitle>Contact Information</CardTitle>
+                <CardTitle>{"Información de Contacto"}</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div className="flex items-center gap-3">
-                  <Phone className="h-4 w-4 text-muted-foreground" />
-                  <div>
-                    <p className="text-sm text-muted-foreground">Phone</p>
-                    <p className="font-medium">
-                      {business.phone || "+591 123 456 789"}
-                    </p>
+                {business.phone && (
+                  <div className="flex items-center gap-3">
+                    <Phone className="h-4 w-4 text-muted-foreground" />
+                    <div>
+                      <p className="text-sm text-muted-foreground">Phone</p>
+                      <p className="font-medium">
+                        {business.phone}
+                      </p>
+                    </div>
                   </div>
-                </div>
-                <div className="flex items-center gap-3">
-                  <Phone className="h-4 w-4 text-muted-foreground" />
-                  <div>
-                    <p className="text-sm text-muted-foreground">WhatsApp</p>
-                    <p className="font-medium">
-                      {business.whatsapp_phone || "+591 987 654 321"}
-                    </p>
+                )}
+                {business.whatsapp_phone && (
+                  <div className="flex items-center gap-3">
+                    <Phone className="h-4 w-4 text-muted-foreground" />
+                    <div>
+                      <p className="text-sm text-muted-foreground">WhatsApp</p>
+                      <p className="font-medium">
+                        {business.whatsapp_phone}
+                      </p>
+                    </div>
                   </div>
-                </div>
-                <div className="flex items-center gap-3">
-                  <Mail className="h-4 w-4 text-muted-foreground" />
-                  <div>
-                    <p className="text-sm text-muted-foreground">Email</p>
-                    <p className="font-medium">
-                      {business.email || "info@artisancoffee.com"}
-                    </p>
+                )}
+                {business.email && (
+                  <div className="flex items-center gap-3">
+                    <Mail className="h-4 w-4 text-muted-foreground" />
+                    <div>
+                      <p className="text-sm text-muted-foreground">Email</p>
+                      <p className="font-medium">
+                        {business.email || "info@artisancoffee.com"}
+                      </p>
+                    </div>
                   </div>
-                </div>
-                <div className="flex items-center gap-3">
-                  <Globe className="h-4 w-4 text-muted-foreground" />
-                  <div>
-                    <p className="text-sm text-muted-foreground">Website</p>
-                    <p className="font-medium">
-                      {business.website_url || "www.artisancoffee.com"}
-                    </p>
+                )}
+                {business.website_url && (
+                  <div className="flex items-center gap-3">
+                    <Globe className="h-4 w-4 text-muted-foreground" />
+                    <div>
+                      <p className="text-sm text-muted-foreground">Website</p>
+                      <p className="font-medium">
+                        {business.website_url || "www.artisancoffee.com"}
+                      </p>
+                    </div>
                   </div>
-                </div>
-                <div className="flex items-center gap-3">
-                  <MapPin className="h-4 w-4 text-muted-foreground" />
-                  <div>
-                    <p className="text-sm text-muted-foreground">Address</p>
-                    <p className="font-medium">
-                      {business.address
-                        ? `${business.address}, ${business.city}, ${business.country}`
-                        : "123 Main Street, Santa Cruz, Bolivia"}
-                    </p>
+                )}
+                {business.address && (
+                  <div className="flex items-center gap-3">
+                    <MapPin className="h-4 w-4 text-muted-foreground" />
+                    <div>
+                      <p className="text-sm text-muted-foreground">Address</p>
+                      <p className="font-medium">
+                        {business.address
+                          ? `${business.address}, ${business.city}, ${business.country}`
+                          : "123 Main Street, Santa Cruz, Bolivia"}
+                      </p>
+                    </div>
                   </div>
-                </div>
+                )}
+                {!business.phone && !business.whatsapp_phone && !business.email && !business.website_url && !business.address && (
+                  <p className="text-sm text-muted-foreground">
+                    No hay información de contacto configurada
+                  </p>
+                )}
               </CardContent>
             </Card>
 
             {/* Social Media */}
             <Card>
               <CardHeader>
-                <CardTitle>Social Media</CardTitle>
+                <CardTitle>Redes Sociales</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 {socialLinks.length > 0 ? (
@@ -266,33 +258,33 @@ export const BusinessDetail = ({ businessId }: BusinessDetailProps) => {
             {/* Profile Stats */}
             <Card>
               <CardHeader>
-                <CardTitle>Profile Stats</CardTitle>
+                <CardTitle>{"Estadísticas"}</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div>
+                {/* <div>
                   <p className="text-sm text-muted-foreground mb-1">
                     Profile Views
                   </p>
                   <p className="text-2xl font-bold">{mockData.profileViews}</p>
-                </div>
-                <div>
+                </div> */}
+                {/* <div>
                   <p className="text-sm text-muted-foreground mb-1">
-                    Products Listed
+                    Productos Listados
                   </p>
                   <p className="text-2xl font-bold">
                     {mockData.productsListed}
                   </p>
-                </div>
+                </div> */}
                 <div>
                   <p className="text-sm text-muted-foreground mb-1">
-                    Last Updated
+                    Última Actualización
                   </p>
                   <p className="font-medium">{lastUpdated}</p>
                 </div>
                 <div>
                   <p className="text-sm text-muted-foreground mb-1">Status</p>
                   <Badge variant={business.active ? "default" : "outline"}>
-                    {business.active ? "Active" : "Inactive"}
+                    {business.active ? "Activo" : "Inactivo"}
                   </Badge>
                 </div>
               </CardContent>
@@ -304,7 +296,7 @@ export const BusinessDetail = ({ businessId }: BusinessDetailProps) => {
             </div>
 
             {/* Recent Activity */}
-            <Card>
+            {/* <Card>
               <CardHeader>
                 <CardTitle>Recent Activity</CardTitle>
               </CardHeader>
@@ -324,7 +316,7 @@ export const BusinessDetail = ({ businessId }: BusinessDetailProps) => {
                   </div>
                 ))}
               </CardContent>
-            </Card>
+            </Card> */}
           </div>
         </div>
       </div>

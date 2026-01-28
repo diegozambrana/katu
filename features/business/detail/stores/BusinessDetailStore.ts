@@ -8,6 +8,7 @@ interface BusinessDetailState {
   setBusiness: (business: Business | null) => void;
   setLoading: (loading: boolean) => void;
   setError: (error: string | null) => void;
+  reset: () => void;
 }
 
 export const useBusinessDetailStore = create<BusinessDetailState>((set) => ({
@@ -20,4 +21,6 @@ export const useBusinessDetailStore = create<BusinessDetailState>((set) => ({
   setLoading: (loading) => set({ loading }),
 
   setError: (error) => set({ error }),
+
+  reset: () => set({ business: null, loading: false, error: null }),
 }));
