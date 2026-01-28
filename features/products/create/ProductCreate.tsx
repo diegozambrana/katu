@@ -1,6 +1,7 @@
 "use client";
 
 import { MainContainer } from "@/components/layout/container";
+import { BREADCRUMB } from "@/components/Breadcrumb";
 import {
   Form,
   FormControl,
@@ -50,7 +51,7 @@ export const ProductCreate = ({ businesses, productId }: ProductCreateProps) => 
   const isEditMode = !!productId;
 
   return (
-    <MainContainer title={isEditMode ? "Editar Producto" : "Crear Producto"}>
+    <MainContainer title={isEditMode ? "Editar Producto" : "Crear Producto"} breadcrumb={isEditMode ? BREADCRUMB.PRODUCT_EDIT : BREADCRUMB.PRODUCT_CREATE}>
       <div className="mb-6">
         <p className="text-sm text-muted-foreground">
           {isEditMode

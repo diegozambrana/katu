@@ -2,6 +2,7 @@
 
 import { useCatalogDetail } from "./hooks/useCatalogDetail";
 import { MainContainer } from "@/components/layout/container";
+import { BREADCRUMB } from "@/components/Breadcrumb";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -23,6 +24,7 @@ export const CatalogDetail = ({ catalogId }: CatalogDetailProps) => {
         title="Detalles del Catálogo"
         error={error || undefined}
         loading={loading}
+        breadcrumb={BREADCRUMB.CATALOG_DETAIL}
       >
         <div></div>
       </MainContainer>
@@ -44,6 +46,7 @@ export const CatalogDetail = ({ catalogId }: CatalogDetailProps) => {
   return (
     <MainContainer
       title="Detalles del Catálogo"
+      breadcrumb={BREADCRUMB.CATALOG_DETAIL}
       action={
         <div className="flex gap-2">
           <Button

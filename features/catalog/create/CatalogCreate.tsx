@@ -1,6 +1,7 @@
 "use client";
 
 import { MainContainer } from "@/components/layout/container";
+import { BREADCRUMB } from "@/components/Breadcrumb";
 import {
   Form,
   FormControl,
@@ -64,7 +65,7 @@ export const CatalogCreate = ({ businesses, products, catalogId }: CatalogCreate
   const submitButtonText = isEditMode ? "Guardar Cambios" : "Guardar Catálogo";
 
   return (
-    <MainContainer title={title}>
+    <MainContainer title={title} breadcrumb={isEditMode ? BREADCRUMB.CATALOG_EDIT : BREADCRUMB.CATALOG_CREATE}>
       <div className="mb-6">
         <p className="text-sm text-muted-foreground">{description}</p>
       </div>

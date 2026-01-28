@@ -2,6 +2,7 @@
 
 import { useProductDetail } from "./hooks/useProductDetail";
 import { MainContainer } from "@/components/layout/container";
+import { BREADCRUMB } from "@/components/Breadcrumb";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -22,6 +23,7 @@ export const ProductDetail = ({ productId }: ProductDetailProps) => {
         title="Detalles del Producto"
         error={error || undefined}
         loading={loading}
+        breadcrumb={BREADCRUMB.PRODUCT_DETAIL}
       >
         <div></div>
       </MainContainer>
@@ -54,6 +56,7 @@ export const ProductDetail = ({ productId }: ProductDetailProps) => {
   return (
     <MainContainer
       title="Detalles del Producto"
+      breadcrumb={BREADCRUMB.PRODUCT_DETAIL}
       action={
         <div className="flex gap-2">
           <Button

@@ -1,6 +1,7 @@
 "use client";
 
 import { MainContainer } from "@/components/layout/container";
+import { BREADCRUMB } from "@/components/Breadcrumb";
 import {
   Form,
   FormControl,
@@ -34,7 +35,7 @@ export const BusinessCreate = () => {
   } = useBusinessCreate();
 
   return (
-    <MainContainer title="Business Profile">
+    <MainContainer title="Business Profile" breadcrumb={BREADCRUMB.BUSINESS_CREATE}>
       <div className="mb-6">
         <p className="text-sm text-muted-foreground">
           Manage your business information shown in your public catalog page

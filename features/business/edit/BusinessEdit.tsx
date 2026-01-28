@@ -1,6 +1,7 @@
 "use client";
 
 import { MainContainer } from "@/components/layout/container";
+import { BREADCRUMB } from "@/components/Breadcrumb";
 import {
   Form,
   FormControl,
@@ -38,7 +39,7 @@ export const BusinessEdit = ({ businessId }: BusinessEditProps) => {
   } = useBusinessEdit(businessId);
 
   return (
-    <MainContainer title="Edit Business Profile">
+    <MainContainer title="Edit Business Profile" breadcrumb={BREADCRUMB.BUSINESS_EDIT}>
       <div className="mb-6">
         <p className="text-sm text-muted-foreground">
           Update your business information shown in your public catalog page

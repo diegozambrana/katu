@@ -1,4 +1,5 @@
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Breadcrumb } from "@/components/Breadcrumb";
 
 interface MainContainerProps {
   title: string;
@@ -7,6 +8,7 @@ interface MainContainerProps {
   isEmpty?: boolean;
   error?: string;
   loading?: boolean;
+  breadcrumb?: string;
 }
 
 export const MainContainer = ({
@@ -16,6 +18,7 @@ export const MainContainer = ({
   isEmpty,
   error,
   loading = false,
+  breadcrumb,
 }: MainContainerProps) => {
   if (loading) {
     return (
@@ -28,6 +31,7 @@ export const MainContainer = ({
   }
   return (
     <div className="p-4 md:px-8">
+      {breadcrumb && <Breadcrumb type={breadcrumb} />}
       <div className="flex flex-row justify-between items-center mb-6">
         <h2 className="text-lg font-semibold">{title}</h2>
         {action && <div>{action}</div>}

@@ -2,6 +2,7 @@
 
 import { useBusinessDetail } from "./hooks/useBusinessDetail";
 import { MainContainer } from "@/components/layout/container";
+import { BREADCRUMB } from "@/components/Breadcrumb";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -31,6 +32,7 @@ export const BusinessDetail = ({ businessId }: BusinessDetailProps) => {
         title="Detalles de la Empresa"
         error={error || undefined}
         loading={loading}
+        breadcrumb={BREADCRUMB.BUSINESS_DETAIL}
       >
         <div></div>
       </MainContainer>
@@ -65,6 +67,7 @@ export const BusinessDetail = ({ businessId }: BusinessDetailProps) => {
   return (
     <MainContainer
       title="Business Profile Details"
+      breadcrumb={BREADCRUMB.BUSINESS_DETAIL}
       action={
         <div className="flex gap-2">
           <Button
